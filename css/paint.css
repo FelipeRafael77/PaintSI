@@ -1,0 +1,23 @@
+body{
+	background-color: grey;
+	text-align: center;
+	display: inline;
+}
+
+input[type="button"]{
+    font-family: Comic Sans MS;
+    width: 150px;
+    height: 40px;
+}
+
+input[name="toggle"]{
+  color: red;
+}
+
+.canvas {
+   
+}
+
+#imagem img{
+
+}
