@@ -14,8 +14,8 @@ input[name="toggle"]{
   color: red;
 }
 
-.canvas {
-   
+#canvas{
+   border: solid;
 }
 
 #imagem img{
