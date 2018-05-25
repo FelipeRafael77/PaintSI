@@ -21,3 +21,18 @@ input[name="toggle"]{
 #imagem img{
 
 }
+
+#escolhas button {
+    padding: 10px;
+    border: 1px solid white;
+}
+
+#escolhas button:hover {
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+#visualizar {
+    width: 100%;
+    height: 100px;
+}
