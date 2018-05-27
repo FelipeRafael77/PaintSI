@@ -38,6 +38,17 @@ var RetanguloCheio = Class.create(Figura, {
     }
 });
 
+var Circulo = Class.create(Figura, {
+    draw: function(canvas){
+        canvas.fillStyle();
+    }
+});
+
+var Triangulo = Class.create(Figura, {
+    draw: function(canvas){
+        canvas.filltriangle();
+    }
+});
 
 Element.prototype.leftTopScreen = function() {
     var x = this.offsetLeft;
@@ -67,8 +78,8 @@ function drawFillRect() {
     figura = new RetanguloCheio();
 }
 
-function drawFillCircle(){
-    figura = new Circulo();
+function drawFillStyle(){
+    figura = new Circulo(); 
 }
 
 function drawFillTriangle(){

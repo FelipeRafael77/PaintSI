@@ -7,19 +7,18 @@
  </head>
  <body>
    <div>
-    <input type="button" onclick="drawFillCircle();" value="Circulo"/>
+    <input type="button" ommouseup="palcores();" onmousedown="palcores();" onclick="drawFillStyle();" onclick="palcores();" value="Circulo"/>
      <input type="button" onclick="drawLine();" value="Linha"/>
      <input type="button" onclick="drawStrokeRect();" value="Retangulo"/>
      <input type="button" onclick="drawFillRect();" value="Retangulo Cheio"/>
      <input type="button" onclick="drawFillTriangle();" value="Triangulo"/>
      <input type="button" id="toggle" onclick="toggleShadow();" value="Ligar sombra"/>
-     <input type="button" onclick="palcores();" value="Paleta de Cores">
     <input type="button" onclick="save();" value="Salvar"/>
    </div>
 
    <div id="escolhas"></div>
     <div id="visualizar"></div>
-
+    
    <canvas id="canvas" width="400" height="400" onmousedown="createFigure(event);" onmouseUp="closeFigure(event);"></canvas>
    <img id="imagem" style="border:solid;">
  
