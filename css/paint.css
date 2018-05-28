@@ -1,6 +1,7 @@
 body{
 	background-color: grey;
     display: inline-block;
+    text-align: center;
 }
 
 input[type="button"]{
@@ -11,10 +12,13 @@ input[type="button"]{
 
 #canvas{
    border: solid;
+   margin-top: 50px;
+   
 }
 
 #escolhas button {
     display: inline-block;
+    margin-top: 5px;
     padding: 10px;
     border: 1px solid white;
 }

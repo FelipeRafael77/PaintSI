@@ -40,7 +40,7 @@ var RetanguloCheio = Class.create(Figura, {
 
 var Circulo = Class.create(Figura, {
     draw: function(canvas){
-        canvas.fillStyle();
+        canvas.fillCircle(20,20,150,100);
     }
 });
 
