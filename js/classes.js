@@ -141,5 +141,7 @@ function toggleShadow() {
 
 function save() {
     var img = document.querySelector("#imagem");
-    img.src = document.querySelector("#canvas").toDataURL("image/png");
+    img.src = document.querySelector("#canvas").toDataURL("");
+
 }
+
