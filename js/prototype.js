@@ -1,3 +1,11 @@
+/*  Prototype JavaScript framework, version 1.7
+ *  (c) 2005-2010 Sam Stephenson
+ *
+ *  Prototype is freely distributable under the terms of an MIT-style license.
+ *  For details, see the Prototype web site: http://www.prototypejs.org/
+ *
+ *--------------------------------------------------------------------------*/
+
 var Prototype = {
 
   Version: '1.7',
@@ -72,6 +80,7 @@ var Try = {
   }
 };
 
+/* Based on Alex Arnell's inheritance implementation. */
 
 var Class = (function() {
 
@@ -1012,7 +1021,15 @@ var Enumerable = (function() {
     return '#<Enumerable:' + this.toArray().inspect() + '>';
   }
 
-return {
+
+
+
+
+
+
+
+
+  return {
     each:       each,
     eachSlice:  eachSlice,
     all:        all,
@@ -1067,7 +1084,7 @@ Array.from = $A;
 (function() {
   var arrayProto = Array.prototype,
       slice = arrayProto.slice,
-      _each = arrayProto.forEach;
+      _each = arrayProto.forEach; // use native browser JS 1.6 implementation if available
 
   function each(iterator, context) {
     for (var i = 0, length = this.length >>> 0; i < length; i++) {
@@ -1539,6 +1556,10 @@ Ajax.Request = Class.create(Ajax.Base, {
       headers['Content-type'] = this.options.contentType +
         (this.options.encoding ? '; charset=' + this.options.encoding : '');
 
+      /* Force "Connection: close" for older Mozilla browsers to work
+       * around a bug where XMLHttpRequest sends an incorrect
+       * Content-length header. See Mozilla Bugzilla #246651.
+       */
       if (this.transport.overrideMimeType &&
           (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0,2005])[1] < 2005)
             headers['Connection'] = 'close';
@@ -1633,6 +1654,13 @@ Ajax.Request = Class.create(Ajax.Base, {
 
 Ajax.Request.Events =
   ['Uninitialized', 'Loading', 'Loaded', 'Interactive', 'Complete'];
+
+
+
+
+
+
+
 
 Ajax.Response = Class.create({
   initialize: function(request){
@@ -1809,6 +1837,7 @@ if (Prototype.BrowserFeatures.XPath) {
   };
 }
 
+/*--------------------------------------------------------------------------*/
 
 if (!Node) var Node = { };
 
@@ -3934,7 +3963,12 @@ Prototype.Selector = (function() {
   };
 })();
 Prototype._original_property = window.Sizzle;
-
+/*!
+ * Sizzle CSS Selector Engine - v1.0
+ *  Copyright 2009, The Dojo Foundation
+ *  Released under the MIT, BSD, and GPL Licenses.
+ *  More information: http://sizzlejs.com/
+ */
 (function(){
 
 var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
@@ -4742,7 +4776,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 		};
 	}
 
-	div = null;
+	div = null; // release memory in IE
 })();
 
 if ( document.querySelectorAll ) (function(){
@@ -4769,7 +4803,7 @@ if ( document.querySelectorAll ) (function(){
 		Sizzle[ prop ] = oldSizzle[ prop ];
 	}
 
-	div = null;
+	div = null; // release memory in IE
 })();
 
 if ( document.getElementsByClassName && document.documentElement.getElementsByClassName ) (function(){
@@ -4791,7 +4825,7 @@ if ( document.getElementsByClassName && document.documentElement.getElementsByCl
 		}
 	};
 
-	div = null;
+	div = null; // release memory in IE
 })();
 
 function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
@@ -5054,6 +5088,9 @@ Form.Methods = {
   }
 };
 
+/*--------------------------------------------------------------------------*/
+
+
 Form.Element = {
   focus: function(element) {
     $(element).focus();
@@ -5127,9 +5164,13 @@ Form.Element.Methods = {
   }
 };
 
+/*--------------------------------------------------------------------------*/
+
 var Field = Form.Element;
 
 var $F = Form.Element.Methods.getValue;
+
+/*--------------------------------------------------------------------------*/
 
 Form.Element.Serializers = (function() {
   function input(element, value) {
@@ -5203,6 +5244,9 @@ Form.Element.Serializers = (function() {
   };
 })();
 
+/*--------------------------------------------------------------------------*/
+
+
 Abstract.TimedObserver = Class.create(PeriodicalExecuter, {
   initialize: function($super, element, frequency, callback) {
     $super(callback, frequency);
@@ -5231,6 +5275,8 @@ Form.Observer = Class.create(Abstract.TimedObserver, {
     return Form.serialize(this.element);
   }
 });
+
+/*--------------------------------------------------------------------------*/
 
 Abstract.EventObserver = Class.create({
   initialize: function(element, callback) {
@@ -5762,6 +5808,8 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 })();
 
 (function() {
+  /* Support for the DOMContentLoaded event is based on work by Dan Webb,
+     Matthias Miller, Dean Edwards, John Resig, and Diego Perini. */
 
   var timer;
 
@@ -5800,6 +5848,8 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 })();
 
 Element.addMethods();
+
+/*------------------------------- DEPRECATED -------------------------------*/
 
 Hash.toQueryString = Object.toQueryString;
 
@@ -5904,6 +5954,8 @@ var Position = {
   }
 };
 
+/*--------------------------------------------------------------------------*/
+
 if (!document.getElementsByClassName) document.getElementsByClassName = function(instanceMethods){
   function iter(name) {
     return name.blank() ? null : "[contains(concat(' ', @class, ' '), ' " + name + " ')]";
@@ -5937,6 +5989,8 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
   };
 }(Element.Methods);
 
+/*--------------------------------------------------------------------------*/
+
 Element.ClassNames = Class.create();
 Element.ClassNames.prototype = {
   initialize: function(element) {
@@ -5969,6 +6023,8 @@ Element.ClassNames.prototype = {
 };
 
 Object.extend(Element.ClassNames.prototype, Enumerable);
+
+/*--------------------------------------------------------------------------*/
 
 (function() {
   window.Selector = Class.create({
