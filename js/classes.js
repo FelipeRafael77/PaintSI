@@ -26,6 +26,15 @@ var Linha = Class.create(Figura, {
     }
 });
 
+var LinhaGrossa = Class.create(Figura, {
+    draw: function(canvas) {
+        canvas.beginPath();
+        canvas.moveTo(this.x1, this.y1);
+        canvas.lineTo(this.x2, this.y2);
+        canvas.stroke();
+    }
+});
+
 var Retangulo = Class.create(Figura, {
     draw: function(canvas) {
         canvas.strokeRect(this.x1, this.y1, this.x2 - this.x1, this.y2 - this.y1);
@@ -40,13 +49,13 @@ var RetanguloCheio = Class.create(Figura, {
 
 var Circulo = Class.create(Figura, {
     draw: function(canvas){
-        canvas.fillCircle(20,20,150,100);
+        canvas.Circle();
     }
 });
 
 var Triangulo = Class.create(Figura, {
     draw: function(canvas){
-        canvas.filltriangle();
+        canvas.triangle();
     }
 });
 
@@ -68,7 +77,17 @@ Element.prototype.leftTopScreen = function() {
 
 function drawLine() {
     figura = new Linha();
+
 }
+
+function drawLineWidth() {
+   figura = new LinhaGrossa();
+
+    var ctx = document.getElementById('canvas').getContext('2d');
+
+    ctx.lineWidth=10;
+
+  }
 
 function drawStrokeRect() {
     figura = new Retangulo();
@@ -78,11 +97,19 @@ function drawFillRect() {
     figura = new RetanguloCheio();
 }
 
-function drawFillStyle(){
-    figura = new Circulo(); 
+function drawCircle(){
+    figura = new Circulo();
+
+var c=document.getElementById("canvas");
+var ctx=c.getContext("2d");
+ctx.beginPath();
+ctx.moveTo(this.x1, this.y1);
+ctx.lineTo(this.x2, this.y2);
+ctx.arc(100,75,50,0,2*Math.PI);
+ctx.stroke(); 
 }
 
-function drawFillTriangle(){
+function drawTriangle(){
     figura = new Triangulo();
 
 }
@@ -140,8 +167,10 @@ function toggleShadow() {
 }
 
 function save() {
-    var img = document.querySelector("#imagem");
-    img.src = document.querySelector("#canvas").toDataURL("image/png")
+   
+   var img = document.createElement('a');
+   img.download = "test.png";
+   img.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+   img.click();
 
 }
-
