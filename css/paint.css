@@ -14,8 +14,11 @@ input[type="button"]{
 #canvas{
    border: solid;
    margin-top: 50px;
-   cursor:pointer;
    
+}
+
+#imagem{
+    border:solid;
 }
 
 #escolhas button {

@@ -49,13 +49,20 @@ var RetanguloCheio = Class.create(Figura, {
 
 var Circulo = Class.create(Figura, {
     draw: function(canvas){
-        canvas.Circle();
+        canvas.beginPath();;
+        canvas.arc(100,75,50,0,2*Math.PI);
+        canvas.stroke();
     }
 });
 
 var Triangulo = Class.create(Figura, {
     draw: function(canvas){
-        canvas.triangle();
+       
+        canvas.beginPath();
+        canvas.moveTo(300,300);
+        canvas.lineTo(150,300);
+        canvas.lineTo(300,150);
+        canvas.fill(); 
     }
 });
 
@@ -98,36 +105,11 @@ function drawFillRect() {
 }
 
 function drawCircle(){
-    figura = new Circulo();
-
-var c=document.getElementById("canvas");
-var ctx=c.getContext("2d");
-ctx.beginPath();
-ctx.moveTo(this.x1, this.y1);
-ctx.lineTo(this.x2, this.y2);
-ctx.arc(100,75,50,0,2*Math.PI);
-ctx.stroke(); 
+    figura = new Circulo(); 
 }
 
 function drawTriangle(){
-
-    var canvas = document.getElementById('canvas');
-    if (canvas.getContext){
-    	var ctx = canvas.getContext('2d');
-
-    	ctx.beginPath();
-    	ctx.moveTo(300,300);
-    	ctx.lineTo(150,300);
-    	ctx.lineTo(300,150);
-    	ctx.fill();
-
-    	ctx.beginPath();
-    	ctx.moveTo(200,200);
-   	 	ctx.lineTo(200,100);
-    	ctx.lineTo(100,200);
-    	ctx.closePath();
-    	ctx.stroke();
-    }
+   figura = new Triangulo();
 
 }
 
