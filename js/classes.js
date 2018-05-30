@@ -186,7 +186,7 @@ function toggleShadow() {
 function save() {
    
    var img = document.createElement('a');
-   img.download = "test.png";
+   img.download = "download.png";
    img.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
    img.click();
 
