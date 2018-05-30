@@ -1,0 +1,43 @@
+changelog - 22/05/2018
+
+#ADD
+- ADD layout paint
+
+changelog - 23/05/2018
+
+#ADD
+- ADD function triangulo e circulo
+
+changelog - 25/05/2018
+
+#ADD
+- ADD Paleta de cores no layout
+
+changelog - 27/05/2018
+
+#CHANGE
+
+-CHANGE layout da pagina
+
+changelog - 28/05/2018
+
+#ADD
+- ADD lib js
+
+#REMOVE
+- REMOVE lib JS
+
+#FIX
+-FIX functions JS
+
+#ADD
+- ADD nova function
+
+#ADD
+- ADD function trinagulo
+
+
+changelog - 30/05/2018
+
+#CHANGE
+- CHANGE functions JS
