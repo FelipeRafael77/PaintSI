@@ -1,16 +1,19 @@
 <html>
  <head>
+
   <link rel="stylesheet" type="text/css" href="css/paint.css">
   <script src="js/prototype.js"></script>
   <script src="js/classes.js"></script>
   
  </head>
- <body>
+ <body background="quadro.jpg">
    <div>
     <input type="button" onclick="drawCircle();" value="Circulo"/>
      <input type="button" onclick="drawLine();" value="Linha"/>
      <input type="button" onclick="drawLineWidth();" value="Linha Grossa">
      <input type="button" onclick="drawStrokeRect();" value="Retangulo">
+   </div>
+    <div class= "button2">
      <input type="button" onclick="drawFillRect();" value="Retangulo Cheio"/>
      <input type="button" onclick="drawTriangle();" value="Triangulo"/>
      <input type="button" id="toggle" onclick="toggleShadow();" value="Ligar sombra"/>
@@ -21,21 +24,7 @@
    <div id="escolhas"></div>
     
    <canvas id="canvas" width="600" height="600" onmousedown="createFigure(event);" onmouseup="closeFigure(event);"></canvas>
-   <img id="imagem">
+   <img id="imagem" style="border:solid;">
  
  </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
