@@ -110,7 +110,24 @@ ctx.stroke();
 }
 
 function drawTriangle(){
-    figura = new Triangulo();
+
+    var canvas = document.getElementById('canvas');
+    if (canvas.getContext){
+    	var ctx = canvas.getContext('2d');
+
+    	ctx.beginPath();
+    	ctx.moveTo(300,300);
+    	ctx.lineTo(150,300);
+    	ctx.lineTo(300,150);
+    	ctx.fill();
+
+    	ctx.beginPath();
+    	ctx.moveTo(200,200);
+   	 	ctx.lineTo(200,100);
+    	ctx.lineTo(100,200);
+    	ctx.closePath();
+    	ctx.stroke();
+    }
 
 }
 
