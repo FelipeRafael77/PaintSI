@@ -25,10 +25,10 @@ input[type="button"]{
     height: 40px;
 }
 #canvas{
-   border: solid;
-   margin-top: 80px;
-   cursor:pointer;
-   
+ border: solid;
+ margin-top: 80px;
+ cursor:pointer;
+
 }
 
 #escolhas button {

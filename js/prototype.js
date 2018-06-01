@@ -29,8 +29,8 @@ var Prototype = {
         return true;
 
       var div = document.createElement('div'),
-          form = document.createElement('form'),
-          isSupported = false;
+      form = document.createElement('form'),
+      isSupported = false;
 
       if (div['__proto__'] && (div['__proto__'] !== form['__proto__'])) {
         isSupported = true;
@@ -114,7 +114,7 @@ var Class = (function() {
 
   function addMethods(source) {
     var ancestor   = this.superclass && this.superclass.prototype,
-        properties = Object.keys(source);
+    properties = Object.keys(source);
 
     if (IS_DONTENUM_BUGGY) {
       if (source.toString != Object.prototype.toString)
@@ -126,47 +126,47 @@ var Class = (function() {
     for (var i = 0, length = properties.length; i < length; i++) {
       var property = properties[i], value = source[property];
       if (ancestor && Object.isFunction(value) &&
-          value.argumentNames()[0] == "$super") {
+        value.argumentNames()[0] == "$super") {
         var method = value;
-        value = (function(m) {
-          return function() { return ancestor[m].apply(this, arguments); };
-        })(property).wrap(method);
+      value = (function(m) {
+        return function() { return ancestor[m].apply(this, arguments); };
+      })(property).wrap(method);
 
-        value.valueOf = method.valueOf.bind(method);
-        value.toString = method.toString.bind(method);
-      }
-      this.prototype[property] = value;
+      value.valueOf = method.valueOf.bind(method);
+      value.toString = method.toString.bind(method);
     }
-
-    return this;
+    this.prototype[property] = value;
   }
 
-  return {
-    create: create,
-    Methods: {
-      addMethods: addMethods
-    }
-  };
+  return this;
+}
+
+return {
+  create: create,
+  Methods: {
+    addMethods: addMethods
+  }
+};
 })();
 (function() {
 
   var _toString = Object.prototype.toString,
-      NULL_TYPE = 'Null',
-      UNDEFINED_TYPE = 'Undefined',
-      BOOLEAN_TYPE = 'Boolean',
-      NUMBER_TYPE = 'Number',
-      STRING_TYPE = 'String',
-      OBJECT_TYPE = 'Object',
-      FUNCTION_CLASS = '[object Function]',
-      BOOLEAN_CLASS = '[object Boolean]',
-      NUMBER_CLASS = '[object Number]',
-      STRING_CLASS = '[object String]',
-      ARRAY_CLASS = '[object Array]',
-      DATE_CLASS = '[object Date]',
-      NATIVE_JSON_STRINGIFY_SUPPORT = window.JSON &&
-        typeof JSON.stringify === 'function' &&
-        JSON.stringify(0) === '0' &&
-        typeof JSON.stringify(Prototype.K) === 'undefined';
+  NULL_TYPE = 'Null',
+  UNDEFINED_TYPE = 'Undefined',
+  BOOLEAN_TYPE = 'Boolean',
+  NUMBER_TYPE = 'Number',
+  STRING_TYPE = 'String',
+  OBJECT_TYPE = 'Object',
+  FUNCTION_CLASS = '[object Function]',
+  BOOLEAN_CLASS = '[object Boolean]',
+  NUMBER_CLASS = '[object Number]',
+  STRING_CLASS = '[object String]',
+  ARRAY_CLASS = '[object Array]',
+  DATE_CLASS = '[object Date]',
+  NATIVE_JSON_STRINGIFY_SUPPORT = window.JSON &&
+  typeof JSON.stringify === 'function' &&
+  JSON.stringify(0) === '0' &&
+  typeof JSON.stringify(Prototype.K) === 'undefined';
 
   function Type(o) {
     switch(o) {
@@ -205,7 +205,7 @@ var Class = (function() {
 
   function Str(key, holder, stack) {
     var value = holder[key],
-        type = typeof value;
+    type = typeof value;
 
     if (Type(value) === OBJECT_TYPE && typeof value.toJSON === 'function') {
       value = value.toJSON(key);
@@ -217,7 +217,7 @@ var Class = (function() {
       case NUMBER_CLASS:
       case BOOLEAN_CLASS:
       case STRING_CLASS:
-        value = value.valueOf();
+      value = value.valueOf();
     }
 
     switch (value) {
@@ -229,129 +229,129 @@ var Class = (function() {
     type = typeof value;
     switch (type) {
       case 'string':
-        return value.inspect(true);
+      return value.inspect(true);
       case 'number':
-        return isFinite(value) ? String(value) : 'null';
+      return isFinite(value) ? String(value) : 'null';
       case 'object':
 
-        for (var i = 0, length = stack.length; i < length; i++) {
-          if (stack[i] === value) { throw new TypeError(); }
-        }
-        stack.push(value);
-
-        var partial = [];
-        if (_class === ARRAY_CLASS) {
-          for (var i = 0, length = value.length; i < length; i++) {
-            var str = Str(i, value, stack);
-            partial.push(typeof str === 'undefined' ? 'null' : str);
-          }
-          partial = '[' + partial.join(',') + ']';
-        } else {
-          var keys = Object.keys(value);
-          for (var i = 0, length = keys.length; i < length; i++) {
-            var key = keys[i], str = Str(key, value, stack);
-            if (typeof str !== "undefined") {
-               partial.push(key.inspect(true)+ ':' + str);
-             }
-          }
-          partial = '{' + partial.join(',') + '}';
-        }
-        stack.pop();
-        return partial;
-    }
-  }
-
-  function stringify(object) {
-    return JSON.stringify(object);
-  }
-
-  function toQueryString(object) {
-    return $H(object).toQueryString();
-  }
-
-  function toHTML(object) {
-    return object && object.toHTML ? object.toHTML() : String.interpret(object);
-  }
-
-  function keys(object) {
-    if (Type(object) !== OBJECT_TYPE) { throw new TypeError(); }
-    var results = [];
-    for (var property in object) {
-      if (object.hasOwnProperty(property)) {
-        results.push(property);
+      for (var i = 0, length = stack.length; i < length; i++) {
+        if (stack[i] === value) { throw new TypeError(); }
       }
+      stack.push(value);
+
+      var partial = [];
+      if (_class === ARRAY_CLASS) {
+        for (var i = 0, length = value.length; i < length; i++) {
+          var str = Str(i, value, stack);
+          partial.push(typeof str === 'undefined' ? 'null' : str);
+        }
+        partial = '[' + partial.join(',') + ']';
+      } else {
+        var keys = Object.keys(value);
+        for (var i = 0, length = keys.length; i < length; i++) {
+          var key = keys[i], str = Str(key, value, stack);
+          if (typeof str !== "undefined") {
+           partial.push(key.inspect(true)+ ':' + str);
+         }
+       }
+       partial = '{' + partial.join(',') + '}';
+     }
+     stack.pop();
+     return partial;
+   }
+ }
+
+ function stringify(object) {
+  return JSON.stringify(object);
+}
+
+function toQueryString(object) {
+  return $H(object).toQueryString();
+}
+
+function toHTML(object) {
+  return object && object.toHTML ? object.toHTML() : String.interpret(object);
+}
+
+function keys(object) {
+  if (Type(object) !== OBJECT_TYPE) { throw new TypeError(); }
+  var results = [];
+  for (var property in object) {
+    if (object.hasOwnProperty(property)) {
+      results.push(property);
     }
-    return results;
   }
+  return results;
+}
 
-  function values(object) {
-    var results = [];
-    for (var property in object)
-      results.push(object[property]);
-    return results;
-  }
+function values(object) {
+  var results = [];
+  for (var property in object)
+    results.push(object[property]);
+  return results;
+}
 
-  function clone(object) {
-    return extend({ }, object);
-  }
+function clone(object) {
+  return extend({ }, object);
+}
 
-  function isElement(object) {
-    return !!(object && object.nodeType == 1);
-  }
+function isElement(object) {
+  return !!(object && object.nodeType == 1);
+}
 
-  function isArray(object) {
-    return _toString.call(object) === ARRAY_CLASS;
-  }
+function isArray(object) {
+  return _toString.call(object) === ARRAY_CLASS;
+}
 
-  var hasNativeIsArray = (typeof Array.isArray == 'function')
-    && Array.isArray([]) && !Array.isArray({});
+var hasNativeIsArray = (typeof Array.isArray == 'function')
+&& Array.isArray([]) && !Array.isArray({});
 
-  if (hasNativeIsArray) {
-    isArray = Array.isArray;
-  }
+if (hasNativeIsArray) {
+  isArray = Array.isArray;
+}
 
-  function isHash(object) {
-    return object instanceof Hash;
-  }
+function isHash(object) {
+  return object instanceof Hash;
+}
 
-  function isFunction(object) {
-    return _toString.call(object) === FUNCTION_CLASS;
-  }
+function isFunction(object) {
+  return _toString.call(object) === FUNCTION_CLASS;
+}
 
-  function isString(object) {
-    return _toString.call(object) === STRING_CLASS;
-  }
+function isString(object) {
+  return _toString.call(object) === STRING_CLASS;
+}
 
-  function isNumber(object) {
-    return _toString.call(object) === NUMBER_CLASS;
-  }
+function isNumber(object) {
+  return _toString.call(object) === NUMBER_CLASS;
+}
 
-  function isDate(object) {
-    return _toString.call(object) === DATE_CLASS;
-  }
+function isDate(object) {
+  return _toString.call(object) === DATE_CLASS;
+}
 
-  function isUndefined(object) {
-    return typeof object === "undefined";
-  }
+function isUndefined(object) {
+  return typeof object === "undefined";
+}
 
-  extend(Object, {
-    extend:        extend,
-    inspect:       inspect,
-    toJSON:        NATIVE_JSON_STRINGIFY_SUPPORT ? stringify : toJSON,
-    toQueryString: toQueryString,
-    toHTML:        toHTML,
-    keys:          Object.keys || keys,
-    values:        values,
-    clone:         clone,
-    isElement:     isElement,
-    isArray:       isArray,
-    isHash:        isHash,
-    isFunction:    isFunction,
-    isString:      isString,
-    isNumber:      isNumber,
-    isDate:        isDate,
-    isUndefined:   isUndefined
-  });
+extend(Object, {
+  extend:        extend,
+  inspect:       inspect,
+  toJSON:        NATIVE_JSON_STRINGIFY_SUPPORT ? stringify : toJSON,
+  toQueryString: toQueryString,
+  toHTML:        toHTML,
+  keys:          Object.keys || keys,
+  values:        values,
+  clone:         clone,
+  isElement:     isElement,
+  isArray:       isArray,
+  isHash:        isHash,
+  isFunction:    isFunction,
+  isString:      isString,
+  isNumber:      isNumber,
+  isDate:        isDate,
+  isUndefined:   isUndefined
+});
 })();
 Object.extend(Function.prototype, (function() {
   var slice = Array.prototype.slice;
@@ -369,8 +369,8 @@ Object.extend(Function.prototype, (function() {
 
   function argumentNames() {
     var names = this.toString().match(/^[\s\(]*function[^(]*\(([^)]*)\)/)[1]
-      .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
-      .replace(/\s+/g, '').split(',');
+    .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
+    .replace(/\s+/g, '').split(',');
     return names.length == 1 && !names[0] ? [] : names;
   }
 
@@ -449,11 +449,11 @@ Object.extend(Function.prototype, (function() {
 
   function toISOString() {
     return this.getUTCFullYear() + '-' +
-      (this.getUTCMonth() + 1).toPaddedString(2) + '-' +
-      this.getUTCDate().toPaddedString(2) + 'T' +
-      this.getUTCHours().toPaddedString(2) + ':' +
-      this.getUTCMinutes().toPaddedString(2) + ':' +
-      this.getUTCSeconds().toPaddedString(2) + 'Z';
+    (this.getUTCMonth() + 1).toPaddedString(2) + '-' +
+    this.getUTCDate().toPaddedString(2) + 'T' +
+    this.getUTCHours().toPaddedString(2) + ':' +
+    this.getUTCMinutes().toPaddedString(2) + ':' +
+    this.getUTCSeconds().toPaddedString(2) + 'Z';
   }
 
 
@@ -524,8 +524,8 @@ Object.extend(String, {
 
 Object.extend(String.prototype, (function() {
   var NATIVE_JSON_PARSE_SUPPORT = window.JSON &&
-    typeof JSON.parse === 'function' &&
-    JSON.parse('{"test": true}').test;
+  typeof JSON.parse === 'function' &&
+  JSON.parse('{"test": true}').test;
 
   function prepareReplacement(replacement) {
     if (Object.isFunction(replacement)) return replacement;
@@ -576,7 +576,7 @@ Object.extend(String.prototype, (function() {
     length = length || 30;
     truncation = Object.isUndefined(truncation) ? '...' : truncation;
     return this.length > length ?
-      this.slice(0, length - truncation.length) + truncation : String(this);
+    this.slice(0, length - truncation.length) + truncation : String(this);
   }
 
   function strip() {
@@ -593,7 +593,7 @@ Object.extend(String.prototype, (function() {
 
   function extractScripts() {
     var matchAll = new RegExp(Prototype.ScriptFragment, 'img'),
-        matchOne = new RegExp(Prototype.ScriptFragment, 'im');
+    matchOne = new RegExp(Prototype.ScriptFragment, 'im');
     return (this.match(matchAll) || []).map(function(scriptTag) {
       return (scriptTag.match(matchOne) || ['', ''])[1];
     });
@@ -619,7 +619,7 @@ Object.extend(String.prototype, (function() {
     return match[1].split(separator || '&').inject({ }, function(hash, pair) {
       if ((pair = pair.split('='))[0]) {
         var key = decodeURIComponent(pair.shift()),
-            value = pair.length > 1 ? pair.join('=') : pair[0];
+        value = pair.length > 1 ? pair.join('=') : pair[0];
 
         if (value != undefined) value = decodeURIComponent(value);
 
@@ -639,7 +639,7 @@ Object.extend(String.prototype, (function() {
 
   function succ() {
     return this.slice(0, this.length - 1) +
-      String.fromCharCode(this.charCodeAt(this.length - 1) + 1);
+    String.fromCharCode(this.charCodeAt(this.length - 1) + 1);
   }
 
   function times(count) {
@@ -658,10 +658,10 @@ Object.extend(String.prototype, (function() {
 
   function underscore() {
     return this.replace(/::/g, '/')
-               .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
-               .replace(/([a-z\d])([A-Z])/g, '$1_$2')
-               .replace(/-/g, '_')
-               .toLowerCase();
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+    .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+    .replace(/-/g, '_')
+    .toLowerCase();
   }
 
   function dasherize() {
@@ -694,7 +694,7 @@ Object.extend(String.prototype, (function() {
 
   function evalJSON(sanitize) {
     var json = this.unfilterJSON(),
-        cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+    cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
     if (cx.test(json)) {
       json = json.replace(cx, function (a) {
         return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
@@ -787,7 +787,7 @@ var Template = Class.create({
       if (before == '\\') return match[2];
 
       var ctx = object, expr = match[3],
-          pattern = /^([^.[]+|\[((?:.*?[^\\])?)\])(\.|\[|$)/;
+      pattern = /^([^.[]+|\[((?:.*?[^\\])?)\])(\.|\[|$)/;
 
       match = pattern.exec(expr);
       if (match == null) return before;
@@ -1012,7 +1012,7 @@ var Enumerable = (function() {
     return '#<Enumerable:' + this.toArray().inspect() + '>';
   }
 
-return {
+  return {
     each:       each,
     eachSlice:  eachSlice,
     all:        all,
@@ -1066,8 +1066,8 @@ Array.from = $A;
 
 (function() {
   var arrayProto = Array.prototype,
-      slice = arrayProto.slice,
-      _each = arrayProto.forEach;
+  slice = arrayProto.slice,
+  _each = arrayProto.forEach;
 
   function each(iterator, context) {
     for (var i = 0, length = this.length >>> 0; i < length; i++) {
@@ -1411,7 +1411,7 @@ var Ajax = {
       function() {return new XMLHttpRequest()},
       function() {return new ActiveXObject('Msxml2.XMLHTTP')},
       function() {return new ActiveXObject('Microsoft.XMLHTTP')}
-    ) || false;
+      ) || false;
   },
 
   activeRequestCount: 0
@@ -1482,8 +1482,8 @@ Ajax.Request = Class.create(Ajax.Base, {
     this.url = url;
     this.method = this.options.method;
     var params = Object.isString(this.options.parameters) ?
-          this.options.parameters :
-          Object.toQueryString(this.options.parameters);
+    this.options.parameters :
+    Object.toQueryString(this.options.parameters);
 
     if (!['get', 'post'].include(this.method)) {
       params += (params ? '&' : '') + "_method=" + this.method;
@@ -1537,11 +1537,11 @@ Ajax.Request = Class.create(Ajax.Base, {
 
     if (this.method == 'post') {
       headers['Content-type'] = this.options.contentType +
-        (this.options.encoding ? '; charset=' + this.options.encoding : '');
+      (this.options.encoding ? '; charset=' + this.options.encoding : '');
 
       if (this.transport.overrideMimeType &&
-          (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0,2005])[1] < 2005)
-            headers['Connection'] = 'close';
+        (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0,2005])[1] < 2005)
+        headers['Connection'] = 'close';
     }
 
     if (typeof this.options.requestHeaders == 'object') {
@@ -1550,95 +1550,95 @@ Ajax.Request = Class.create(Ajax.Base, {
       if (Object.isFunction(extras.push))
         for (var i = 0, length = extras.length; i < length; i += 2)
           headers[extras[i]] = extras[i+1];
-      else
-        $H(extras).each(function(pair) { headers[pair.key] = pair.value });
-    }
+        else
+          $H(extras).each(function(pair) { headers[pair.key] = pair.value });
+      }
 
-    for (var name in headers)
-      this.transport.setRequestHeader(name, headers[name]);
-  },
+      for (var name in headers)
+        this.transport.setRequestHeader(name, headers[name]);
+    },
 
-  success: function() {
-    var status = this.getStatus();
-    return !status || (status >= 200 && status < 300) || status == 304;
-  },
+    success: function() {
+      var status = this.getStatus();
+      return !status || (status >= 200 && status < 300) || status == 304;
+    },
 
-  getStatus: function() {
-    try {
-      if (this.transport.status === 1223) return 204;
-      return this.transport.status || 0;
-    } catch (e) { return 0 }
-  },
-
-  respondToReadyState: function(readyState) {
-    var state = Ajax.Request.Events[readyState], response = new Ajax.Response(this);
-
-    if (state == 'Complete') {
+    getStatus: function() {
       try {
-        this._complete = true;
-        (this.options['on' + response.status]
-         || this.options['on' + (this.success() ? 'Success' : 'Failure')]
-         || Prototype.emptyFunction)(response, response.headerJSON);
+        if (this.transport.status === 1223) return 204;
+        return this.transport.status || 0;
+      } catch (e) { return 0 }
+    },
+
+    respondToReadyState: function(readyState) {
+      var state = Ajax.Request.Events[readyState], response = new Ajax.Response(this);
+
+      if (state == 'Complete') {
+        try {
+          this._complete = true;
+          (this.options['on' + response.status]
+           || this.options['on' + (this.success() ? 'Success' : 'Failure')]
+           || Prototype.emptyFunction)(response, response.headerJSON);
+         } catch (e) {
+          this.dispatchException(e);
+        }
+
+        var contentType = response.getHeader('Content-type');
+        if (this.options.evalJS == 'force'
+          || (this.options.evalJS && this.isSameOrigin() && contentType
+            && contentType.match(/^\s*(text|application)\/(x-)?(java|ecma)script(;.*)?\s*$/i)))
+          this.evalResponse();
+      }
+
+      try {
+        (this.options['on' + state] || Prototype.emptyFunction)(response, response.headerJSON);
+        Ajax.Responders.dispatch('on' + state, this, response, response.headerJSON);
       } catch (e) {
         this.dispatchException(e);
       }
 
-      var contentType = response.getHeader('Content-type');
-      if (this.options.evalJS == 'force'
-          || (this.options.evalJS && this.isSameOrigin() && contentType
-          && contentType.match(/^\s*(text|application)\/(x-)?(java|ecma)script(;.*)?\s*$/i)))
-        this.evalResponse();
+      if (state == 'Complete') {
+        this.transport.onreadystatechange = Prototype.emptyFunction;
+      }
+    },
+
+    isSameOrigin: function() {
+      var m = this.url.match(/^\s*https?:\/\/[^\/]*/);
+      return !m || (m[0] == '#{protocol}//#{domain}#{port}'.interpolate({
+        protocol: location.protocol,
+        domain: document.domain,
+        port: location.port ? ':' + location.port : ''
+      }));
+    },
+
+    getHeader: function(name) {
+      try {
+        return this.transport.getResponseHeader(name) || null;
+      } catch (e) { return null; }
+    },
+
+    evalResponse: function() {
+      try {
+        return eval((this.transport.responseText || '').unfilterJSON());
+      } catch (e) {
+        this.dispatchException(e);
+      }
+    },
+
+    dispatchException: function(exception) {
+      (this.options.onException || Prototype.emptyFunction)(this, exception);
+      Ajax.Responders.dispatch('onException', this, exception);
     }
-
-    try {
-      (this.options['on' + state] || Prototype.emptyFunction)(response, response.headerJSON);
-      Ajax.Responders.dispatch('on' + state, this, response, response.headerJSON);
-    } catch (e) {
-      this.dispatchException(e);
-    }
-
-    if (state == 'Complete') {
-      this.transport.onreadystatechange = Prototype.emptyFunction;
-    }
-  },
-
-  isSameOrigin: function() {
-    var m = this.url.match(/^\s*https?:\/\/[^\/]*/);
-    return !m || (m[0] == '#{protocol}//#{domain}#{port}'.interpolate({
-      protocol: location.protocol,
-      domain: document.domain,
-      port: location.port ? ':' + location.port : ''
-    }));
-  },
-
-  getHeader: function(name) {
-    try {
-      return this.transport.getResponseHeader(name) || null;
-    } catch (e) { return null; }
-  },
-
-  evalResponse: function() {
-    try {
-      return eval((this.transport.responseText || '').unfilterJSON());
-    } catch (e) {
-      this.dispatchException(e);
-    }
-  },
-
-  dispatchException: function(exception) {
-    (this.options.onException || Prototype.emptyFunction)(this, exception);
-    Ajax.Responders.dispatch('onException', this, exception);
-  }
-});
+  });
 
 Ajax.Request.Events =
-  ['Uninitialized', 'Loading', 'Loaded', 'Interactive', 'Complete'];
+['Uninitialized', 'Loading', 'Loaded', 'Interactive', 'Complete'];
 
 Ajax.Response = Class.create({
   initialize: function(request){
     this.request = request;
     var transport  = this.transport  = request.transport,
-        readyState = this.readyState = transport.readyState;
+    readyState = this.readyState = transport.readyState;
 
     if ((readyState > 2 && !Prototype.Browser.IE) || readyState == 4) {
       this.status       = this.getStatus();
@@ -1698,8 +1698,8 @@ Ajax.Response = Class.create({
     var options = this.request.options;
     if (!options.evalJSON || (options.evalJSON != 'force' &&
       !(this.getHeader('Content-type') || '').include('application/json')) ||
-        this.responseText.blank())
-          return null;
+      this.responseText.blank())
+      return null;
     try {
       return this.responseText.evalJSON(options.sanitizeJSON ||
         !this.request.isSameOrigin());
@@ -1728,7 +1728,7 @@ Ajax.Updater = Class.create(Ajax.Request, {
 
   updateContent: function(responseText) {
     var receiver = this.container[this.success() ? 'success' : 'failure'],
-        options = this.options;
+    options = this.options;
 
     if (!options.evalScripts) responseText = responseText.stripScripts();
 
@@ -1863,7 +1863,7 @@ if (!Node.ELEMENT_NODE) {
     if (!cache[tagName]) cache[tagName] = Element.extend(document.createElement(tagName));
 
     var node = shouldUseCache(tagName, attributes) ?
-     cache[tagName].cloneNode(false) : document.createElement(tagName);
+    cache[tagName].cloneNode(false) : document.createElement(tagName);
 
     return Element.writeAttribute(node, attributes);
   };
@@ -1918,7 +1918,7 @@ Element.Methods = {
 
     var SELECT_ELEMENT_INNERHTML_BUGGY = (function(){
       var el = document.createElement("select"),
-          isBuggy = true;
+      isBuggy = true;
       el.innerHTML = "<option value=\"test\">test</option>";
       if (el.options && el.options[0]) {
         isBuggy = el.options[0].nodeName.toUpperCase() !== "OPTION";
@@ -1954,15 +1954,15 @@ Element.Methods = {
     })();
 
     var ANY_INNERHTML_BUGGY = SELECT_ELEMENT_INNERHTML_BUGGY ||
-     TABLE_ELEMENT_INNERHTML_BUGGY || LINK_ELEMENT_INNERHTML_BUGGY;
+    TABLE_ELEMENT_INNERHTML_BUGGY || LINK_ELEMENT_INNERHTML_BUGGY;
 
     var SCRIPT_ELEMENT_REJECTS_TEXTNODE_APPENDING = (function () {
       var s = document.createElement("script"),
-          isBuggy = false;
+      isBuggy = false;
       try {
         s.appendChild(document.createTextNode(""));
         isBuggy = !s.firstChild ||
-          s.firstChild && s.firstChild.nodeType !== 3;
+        s.firstChild && s.firstChild.nodeType !== 3;
       } catch (e) {
         isBuggy = true;
       }
@@ -1976,7 +1976,7 @@ Element.Methods = {
       var purgeElement = Element._purgeElement;
 
       var descendants = element.getElementsByTagName('*'),
-       i = descendants.length;
+      i = descendants.length;
       while (i--) purgeElement(descendants[i]);
 
       if (content && content.toElement)
@@ -2000,9 +2000,9 @@ Element.Methods = {
             element.removeChild(element.firstChild);
           }
           Element._getContentFromAnonymousElement(tagName, content.stripScripts())
-            .each(function(node) {
-              element.appendChild(node)
-            });
+          .each(function(node) {
+            element.appendChild(node)
+          });
         } else if (LINK_ELEMENT_INNERHTML_BUGGY && Object.isString(content) && content.indexOf('<link') > -1) {
           while (element.firstChild) {
             element.removeChild(element.firstChild);
@@ -2043,8 +2043,8 @@ Element.Methods = {
     element = $(element);
 
     if (Object.isString(insertions) || Object.isNumber(insertions) ||
-        Object.isElement(insertions) || (insertions && (insertions.toElement || insertions.toHTML)))
-          insertions = {bottom:insertions};
+      Object.isElement(insertions) || (insertions && (insertions.toElement || insertions.toHTML)))
+      insertions = {bottom:insertions};
 
     var content, insert, tagName, childNodes;
 
@@ -2092,8 +2092,8 @@ Element.Methods = {
     var result = '<' + element.tagName.toLowerCase();
     $H({'id': 'id', 'className': 'class'}).each(function(pair) {
       var property = pair.first(),
-          attribute = pair.last(),
-          value = (element[property] || '').toString();
+      attribute = pair.last(),
+      value = (element[property] || '').toString();
       if (value) result += ' ' + attribute + '=' + value.inspect(true);
     });
     return result + '>';
@@ -2150,7 +2150,7 @@ Element.Methods = {
   siblings: function(element) {
     element = $(element);
     return Element.previousSiblings(element).reverse()
-      .concat(Element.nextSiblings(element));
+    .concat(Element.nextSiblings(element));
   },
 
   match: function(element, selector) {
@@ -2165,14 +2165,14 @@ Element.Methods = {
     if (arguments.length == 1) return $(element.parentNode);
     var ancestors = Element.ancestors(element);
     return Object.isNumber(expression) ? ancestors[expression] :
-      Prototype.Selector.find(ancestors, expression, index);
+    Prototype.Selector.find(ancestors, expression, index);
   },
 
   down: function(element, expression, index) {
     element = $(element);
     if (arguments.length == 1) return Element.firstDescendant(element);
     return Object.isNumber(expression) ? Element.descendants(element)[expression] :
-      Element.select(element, expression)[index || 0];
+    Element.select(element, expression)[index || 0];
   },
 
   previous: function(element, expression, index) {
@@ -2230,7 +2230,7 @@ Element.Methods = {
       if (t.names[name]) name = t.names[name];
       if (name.include(':')) {
         return (!element.attributes || !element.attributes[name]) ? null :
-         element.attributes[name].value;
+        element.attributes[name].value;
       }
     }
     return element.getAttribute(name);
@@ -2292,7 +2292,7 @@ Element.Methods = {
   toggleClassName: function(element, className) {
     if (!(element = $(element))) return;
     return Element[Element.hasClassName(element, className) ?
-      'removeClassName' : 'addClassName'](element, className);
+    'removeClassName' : 'addClassName'](element, className);
   },
 
   cleanWhitespace: function(element) {
@@ -2355,14 +2355,14 @@ Element.Methods = {
     if (Object.isString(styles)) {
       element.style.cssText += ';' + styles;
       return styles.include('opacity') ?
-        element.setOpacity(styles.match(/opacity:\s*(\d?\.?\d*)/)[1]) : element;
+      element.setOpacity(styles.match(/opacity:\s*(\d?\.?\d*)/)[1]) : element;
     }
     for (var property in styles)
       if (property == 'opacity') element.setOpacity(styles[property]);
-      else
-        elementStyle[(property == 'float' || property == 'cssFloat') ?
-          (Object.isUndefined(elementStyle.styleFloat) ? 'cssFloat' : 'styleFloat') :
-            property] = styles[property];
+    else
+      elementStyle[(property == 'float' || property == 'cssFloat') ?
+    (Object.isUndefined(elementStyle.styleFloat) ? 'cssFloat' : 'styleFloat') :
+    property] = styles[property];
 
     return element;
   },
@@ -2370,7 +2370,7 @@ Element.Methods = {
   setOpacity: function(element, value) {
     element = $(element);
     element.style.opacity = (value == 1 || value === '') ? '' :
-      (value < 0.00001) ? 0 : value;
+    (value < 0.00001) ? 0 : value;
     return element;
   },
 
@@ -2394,10 +2394,10 @@ Element.Methods = {
     if (element._madePositioned) {
       element._madePositioned = undefined;
       element.style.position =
-        element.style.top =
-        element.style.left =
-        element.style.bottom =
-        element.style.right = '';
+      element.style.top =
+      element.style.left =
+      element.style.bottom =
+      element.style.right = '';
     }
     return element;
   },
@@ -2473,37 +2473,37 @@ if (Prototype.Browser.Opera) {
     function(proceed, element, style) {
       switch (style) {
         case 'height': case 'width':
-          if (!Element.visible(element)) return null;
+        if (!Element.visible(element)) return null;
 
-          var dim = parseInt(proceed(element, style), 10);
+        var dim = parseInt(proceed(element, style), 10);
 
-          if (dim !== element['offset' + style.capitalize()])
-            return dim + 'px';
+        if (dim !== element['offset' + style.capitalize()])
+          return dim + 'px';
 
-          var properties;
-          if (style === 'height') {
-            properties = ['border-top-width', 'padding-top',
-             'padding-bottom', 'border-bottom-width'];
-          }
-          else {
-            properties = ['border-left-width', 'padding-left',
-             'padding-right', 'border-right-width'];
-          }
-          return properties.inject(dim, function(memo, property) {
-            var val = proceed(element, property);
-            return val === null ? memo : memo - parseInt(val, 10);
-          }) + 'px';
+        var properties;
+        if (style === 'height') {
+          properties = ['border-top-width', 'padding-top',
+          'padding-bottom', 'border-bottom-width'];
+        }
+        else {
+          properties = ['border-left-width', 'padding-left',
+          'padding-right', 'border-right-width'];
+        }
+        return properties.inject(dim, function(memo, property) {
+          var val = proceed(element, property);
+          return val === null ? memo : memo - parseInt(val, 10);
+        }) + 'px';
         default: return proceed(element, style);
       }
     }
-  );
+    );
 
   Element.Methods.readAttribute = Element.Methods.readAttribute.wrap(
     function(proceed, element, attribute) {
       if (attribute === 'title') return element.title;
       return proceed(element, attribute);
     }
-  );
+    );
 }
 
 else if (Prototype.Browser.IE) {
@@ -2535,24 +2535,24 @@ else if (Prototype.Browser.IE) {
     var currentStyle = element.currentStyle;
     if ((currentStyle && !currentStyle.hasLayout) ||
       (!currentStyle && element.style.zoom == 'normal'))
-        element.style.zoom = 1;
+      element.style.zoom = 1;
 
     var filter = element.getStyle('filter'), style = element.style;
     if (value == 1 || value === '') {
       (filter = stripAlpha(filter)) ?
-        style.filter = filter : style.removeAttribute('filter');
+      style.filter = filter : style.removeAttribute('filter');
       return element;
     } else if (value < 0.00001) value = 0;
     style.filter = stripAlpha(filter) +
-      'alpha(opacity=' + (value * 100) + ')';
+    'alpha(opacity=' + (value * 100) + ')';
     return element;
   };
 
   Element._attributeTranslations = (function(){
 
     var classProp = 'className',
-        forProp = 'for',
-        el = document.createElement('div');
+    forProp = 'for',
+    el = document.createElement('div');
 
     el.setAttribute(classProp, 'x');
 
@@ -2652,1242 +2652,1242 @@ else if (Prototype.Browser.IE) {
   Element._attributeTranslations.has = {};
 
   $w('colSpan rowSpan vAlign dateTime accessKey tabIndex ' +
-      'encType maxLength readOnly longDesc frameBorder').each(function(attr) {
-    Element._attributeTranslations.write.names[attr.toLowerCase()] = attr;
-    Element._attributeTranslations.has[attr.toLowerCase()] = attr;
-  });
-
-  (function(v) {
-    Object.extend(v, {
-      href:        v._getAttr2,
-      src:         v._getAttr2,
-      type:        v._getAttr,
-      action:      v._getAttrNode,
-      disabled:    v._flag,
-      checked:     v._flag,
-      readonly:    v._flag,
-      multiple:    v._flag,
-      onload:      v._getEv,
-      onunload:    v._getEv,
-      onclick:     v._getEv,
-      ondblclick:  v._getEv,
-      onmousedown: v._getEv,
-      onmouseup:   v._getEv,
-      onmouseover: v._getEv,
-      onmousemove: v._getEv,
-      onmouseout:  v._getEv,
-      onfocus:     v._getEv,
-      onblur:      v._getEv,
-      onkeypress:  v._getEv,
-      onkeydown:   v._getEv,
-      onkeyup:     v._getEv,
-      onsubmit:    v._getEv,
-      onreset:     v._getEv,
-      onselect:    v._getEv,
-      onchange:    v._getEv
+    'encType maxLength readOnly longDesc frameBorder').each(function(attr) {
+      Element._attributeTranslations.write.names[attr.toLowerCase()] = attr;
+      Element._attributeTranslations.has[attr.toLowerCase()] = attr;
     });
-  })(Element._attributeTranslations.read.values);
 
-  if (Prototype.BrowserFeatures.ElementExtensions) {
-    (function() {
-      function _descendants(element) {
-        var nodes = element.getElementsByTagName('*'), results = [];
-        for (var i = 0, node; node = nodes[i]; i++)
+    (function(v) {
+      Object.extend(v, {
+        href:        v._getAttr2,
+        src:         v._getAttr2,
+        type:        v._getAttr,
+        action:      v._getAttrNode,
+        disabled:    v._flag,
+        checked:     v._flag,
+        readonly:    v._flag,
+        multiple:    v._flag,
+        onload:      v._getEv,
+        onunload:    v._getEv,
+        onclick:     v._getEv,
+        ondblclick:  v._getEv,
+        onmousedown: v._getEv,
+        onmouseup:   v._getEv,
+        onmouseover: v._getEv,
+        onmousemove: v._getEv,
+        onmouseout:  v._getEv,
+        onfocus:     v._getEv,
+        onblur:      v._getEv,
+        onkeypress:  v._getEv,
+        onkeydown:   v._getEv,
+        onkeyup:     v._getEv,
+        onsubmit:    v._getEv,
+        onreset:     v._getEv,
+        onselect:    v._getEv,
+        onchange:    v._getEv
+      });
+    })(Element._attributeTranslations.read.values);
+
+    if (Prototype.BrowserFeatures.ElementExtensions) {
+      (function() {
+        function _descendants(element) {
+          var nodes = element.getElementsByTagName('*'), results = [];
+          for (var i = 0, node; node = nodes[i]; i++)
           if (node.tagName !== "!") // Filter out comment nodes.
             results.push(node);
-        return results;
-      }
+          return results;
+        }
 
-      Element.Methods.down = function(element, expression, index) {
-        element = $(element);
-        if (arguments.length == 1) return element.firstDescendant();
-        return Object.isNumber(expression) ? _descendants(element)[expression] :
+        Element.Methods.down = function(element, expression, index) {
+          element = $(element);
+          if (arguments.length == 1) return element.firstDescendant();
+          return Object.isNumber(expression) ? _descendants(element)[expression] :
           Element.select(element, expression)[index || 0];
-      }
-    })();
+        }
+      })();
+    }
+
   }
 
-}
-
-else if (Prototype.Browser.Gecko && /rv:1\.8\.0/.test(navigator.userAgent)) {
-  Element.Methods.setOpacity = function(element, value) {
-    element = $(element);
-    element.style.opacity = (value == 1) ? 0.999999 :
+  else if (Prototype.Browser.Gecko && /rv:1\.8\.0/.test(navigator.userAgent)) {
+    Element.Methods.setOpacity = function(element, value) {
+      element = $(element);
+      element.style.opacity = (value == 1) ? 0.999999 :
       (value === '') ? '' : (value < 0.00001) ? 0 : value;
-    return element;
-  };
-}
+      return element;
+    };
+  }
 
-else if (Prototype.Browser.WebKit) {
-  Element.Methods.setOpacity = function(element, value) {
-    element = $(element);
-    element.style.opacity = (value == 1 || value === '') ? '' :
+  else if (Prototype.Browser.WebKit) {
+    Element.Methods.setOpacity = function(element, value) {
+      element = $(element);
+      element.style.opacity = (value == 1 || value === '') ? '' :
       (value < 0.00001) ? 0 : value;
 
-    if (value == 1)
-      if (element.tagName.toUpperCase() == 'IMG' && element.width) {
-        element.width++; element.width--;
-      } else try {
-        var n = document.createTextNode(' ');
-        element.appendChild(n);
-        element.removeChild(n);
-      } catch (e) { }
+      if (value == 1)
+        if (element.tagName.toUpperCase() == 'IMG' && element.width) {
+          element.width++; element.width--;
+        } else try {
+          var n = document.createTextNode(' ');
+          element.appendChild(n);
+          element.removeChild(n);
+        } catch (e) { }
 
-    return element;
-  };
-}
-
-if ('outerHTML' in document.documentElement) {
-  Element.Methods.replace = function(element, content) {
-    element = $(element);
-
-    if (content && content.toElement) content = content.toElement();
-    if (Object.isElement(content)) {
-      element.parentNode.replaceChild(content, element);
-      return element;
+        return element;
+      };
     }
 
-    content = Object.toHTML(content);
-    var parent = element.parentNode, tagName = parent.tagName.toUpperCase();
+    if ('outerHTML' in document.documentElement) {
+      Element.Methods.replace = function(element, content) {
+        element = $(element);
 
-    if (Element._insertionTranslations.tags[tagName]) {
-      var nextSibling = element.next(),
+        if (content && content.toElement) content = content.toElement();
+        if (Object.isElement(content)) {
+          element.parentNode.replaceChild(content, element);
+          return element;
+        }
+
+        content = Object.toHTML(content);
+        var parent = element.parentNode, tagName = parent.tagName.toUpperCase();
+
+        if (Element._insertionTranslations.tags[tagName]) {
+          var nextSibling = element.next(),
           fragments = Element._getContentFromAnonymousElement(tagName, content.stripScripts());
-      parent.removeChild(element);
-      if (nextSibling)
-        fragments.each(function(node) { parent.insertBefore(node, nextSibling) });
-      else
-        fragments.each(function(node) { parent.appendChild(node) });
+          parent.removeChild(element);
+          if (nextSibling)
+            fragments.each(function(node) { parent.insertBefore(node, nextSibling) });
+          else
+            fragments.each(function(node) { parent.appendChild(node) });
+        }
+        else element.outerHTML = content.stripScripts();
+
+        content.evalScripts.bind(content).defer();
+        return element;
+      };
     }
-    else element.outerHTML = content.stripScripts();
 
-    content.evalScripts.bind(content).defer();
-    return element;
-  };
-}
+    Element._returnOffset = function(l, t) {
+      var result = [l, t];
+      result.left = l;
+      result.top = t;
+      return result;
+    };
 
-Element._returnOffset = function(l, t) {
-  var result = [l, t];
-  result.left = l;
-  result.top = t;
-  return result;
-};
-
-Element._getContentFromAnonymousElement = function(tagName, html, force) {
-  var div = new Element('div'),
+    Element._getContentFromAnonymousElement = function(tagName, html, force) {
+      var div = new Element('div'),
       t = Element._insertionTranslations.tags[tagName];
 
-  var workaround = false;
-  if (t) workaround = true;
-  else if (force) {
-    workaround = true;
-    t = ['', '', 0];
-  }
-
-  if (workaround) {
-    div.innerHTML = '&nbsp;' + t[0] + html + t[1];
-    div.removeChild(div.firstChild);
-    for (var i = t[2]; i--; ) {
-      div = div.firstChild;
-    }
-  }
-  else {
-    div.innerHTML = html;
-  }
-  return $A(div.childNodes);
-};
-
-Element._insertionTranslations = {
-  before: function(element, node) {
-    element.parentNode.insertBefore(node, element);
-  },
-  top: function(element, node) {
-    element.insertBefore(node, element.firstChild);
-  },
-  bottom: function(element, node) {
-    element.appendChild(node);
-  },
-  after: function(element, node) {
-    element.parentNode.insertBefore(node, element.nextSibling);
-  },
-  tags: {
-    TABLE:  ['<table>',                '</table>',                   1],
-    TBODY:  ['<table><tbody>',         '</tbody></table>',           2],
-    TR:     ['<table><tbody><tr>',     '</tr></tbody></table>',      3],
-    TD:     ['<table><tbody><tr><td>', '</td></tr></tbody></table>', 4],
-    SELECT: ['<select>',               '</select>',                  1]
-  }
-};
-
-(function() {
-  var tags = Element._insertionTranslations.tags;
-  Object.extend(tags, {
-    THEAD: tags.TBODY,
-    TFOOT: tags.TBODY,
-    TH:    tags.TD
-  });
-})();
-
-Element.Methods.Simulated = {
-  hasAttribute: function(element, attribute) {
-    attribute = Element._attributeTranslations.has[attribute] || attribute;
-    var node = $(element).getAttributeNode(attribute);
-    return !!(node && node.specified);
-  }
-};
-
-Element.Methods.ByTag = { };
-
-Object.extend(Element, Element.Methods);
-
-(function(div) {
-
-  if (!Prototype.BrowserFeatures.ElementExtensions && div['__proto__']) {
-    window.HTMLElement = { };
-    window.HTMLElement.prototype = div['__proto__'];
-    Prototype.BrowserFeatures.ElementExtensions = true;
-  }
-
-  div = null;
-
-})(document.createElement('div'));
-
-Element.extend = (function() {
-
-  function checkDeficiency(tagName) {
-    if (typeof window.Element != 'undefined') {
-      var proto = window.Element.prototype;
-      if (proto) {
-        var id = '_' + (Math.random()+'').slice(2),
-            el = document.createElement(tagName);
-        proto[id] = 'x';
-        var isBuggy = (el[id] !== 'x');
-        delete proto[id];
-        el = null;
-        return isBuggy;
+      var workaround = false;
+      if (t) workaround = true;
+      else if (force) {
+        workaround = true;
+        t = ['', '', 0];
       }
-    }
-    return false;
-  }
 
-  function extendElementWith(element, methods) {
-    for (var property in methods) {
-      var value = methods[property];
-      if (Object.isFunction(value) && !(property in element))
-        element[property] = value.methodize();
-    }
-  }
+      if (workaround) {
+        div.innerHTML = '&nbsp;' + t[0] + html + t[1];
+        div.removeChild(div.firstChild);
+        for (var i = t[2]; i--; ) {
+          div = div.firstChild;
+        }
+      }
+      else {
+        div.innerHTML = html;
+      }
+      return $A(div.childNodes);
+    };
 
-  var HTMLOBJECTELEMENT_PROTOTYPE_BUGGY = checkDeficiency('object');
+    Element._insertionTranslations = {
+      before: function(element, node) {
+        element.parentNode.insertBefore(node, element);
+      },
+      top: function(element, node) {
+        element.insertBefore(node, element.firstChild);
+      },
+      bottom: function(element, node) {
+        element.appendChild(node);
+      },
+      after: function(element, node) {
+        element.parentNode.insertBefore(node, element.nextSibling);
+      },
+      tags: {
+        TABLE:  ['<table>',                '</table>',                   1],
+        TBODY:  ['<table><tbody>',         '</tbody></table>',           2],
+        TR:     ['<table><tbody><tr>',     '</tr></tbody></table>',      3],
+        TD:     ['<table><tbody><tr><td>', '</td></tr></tbody></table>', 4],
+        SELECT: ['<select>',               '</select>',                  1]
+      }
+    };
 
-  if (Prototype.BrowserFeatures.SpecificElementExtensions) {
-    if (HTMLOBJECTELEMENT_PROTOTYPE_BUGGY) {
-      return function(element) {
-        if (element && typeof element._extendedByPrototype == 'undefined') {
-          var t = element.tagName;
-          if (t && (/^(?:object|applet|embed)$/i.test(t))) {
-            extendElementWith(element, Element.Methods);
-            extendElementWith(element, Element.Methods.Simulated);
-            extendElementWith(element, Element.Methods.ByTag[t.toUpperCase()]);
+    (function() {
+      var tags = Element._insertionTranslations.tags;
+      Object.extend(tags, {
+        THEAD: tags.TBODY,
+        TFOOT: tags.TBODY,
+        TH:    tags.TD
+      });
+    })();
+
+    Element.Methods.Simulated = {
+      hasAttribute: function(element, attribute) {
+        attribute = Element._attributeTranslations.has[attribute] || attribute;
+        var node = $(element).getAttributeNode(attribute);
+        return !!(node && node.specified);
+      }
+    };
+
+    Element.Methods.ByTag = { };
+
+    Object.extend(Element, Element.Methods);
+
+    (function(div) {
+
+      if (!Prototype.BrowserFeatures.ElementExtensions && div['__proto__']) {
+        window.HTMLElement = { };
+        window.HTMLElement.prototype = div['__proto__'];
+        Prototype.BrowserFeatures.ElementExtensions = true;
+      }
+
+      div = null;
+
+    })(document.createElement('div'));
+
+    Element.extend = (function() {
+
+      function checkDeficiency(tagName) {
+        if (typeof window.Element != 'undefined') {
+          var proto = window.Element.prototype;
+          if (proto) {
+            var id = '_' + (Math.random()+'').slice(2),
+            el = document.createElement(tagName);
+            proto[id] = 'x';
+            var isBuggy = (el[id] !== 'x');
+            delete proto[id];
+            el = null;
+            return isBuggy;
           }
         }
-        return element;
+        return false;
       }
-    }
-    return Prototype.K;
-  }
 
-  var Methods = { }, ByTag = Element.Methods.ByTag;
+      function extendElementWith(element, methods) {
+        for (var property in methods) {
+          var value = methods[property];
+          if (Object.isFunction(value) && !(property in element))
+            element[property] = value.methodize();
+        }
+      }
 
-  var extend = Object.extend(function(element) {
-    if (!element || typeof element._extendedByPrototype != 'undefined' ||
-        element.nodeType != 1 || element == window) return element;
+      var HTMLOBJECTELEMENT_PROTOTYPE_BUGGY = checkDeficiency('object');
 
-    var methods = Object.clone(Methods),
+      if (Prototype.BrowserFeatures.SpecificElementExtensions) {
+        if (HTMLOBJECTELEMENT_PROTOTYPE_BUGGY) {
+          return function(element) {
+            if (element && typeof element._extendedByPrototype == 'undefined') {
+              var t = element.tagName;
+              if (t && (/^(?:object|applet|embed)$/i.test(t))) {
+                extendElementWith(element, Element.Methods);
+                extendElementWith(element, Element.Methods.Simulated);
+                extendElementWith(element, Element.Methods.ByTag[t.toUpperCase()]);
+              }
+            }
+            return element;
+          }
+        }
+        return Prototype.K;
+      }
+
+      var Methods = { }, ByTag = Element.Methods.ByTag;
+
+      var extend = Object.extend(function(element) {
+        if (!element || typeof element._extendedByPrototype != 'undefined' ||
+          element.nodeType != 1 || element == window) return element;
+
+          var methods = Object.clone(Methods),
         tagName = element.tagName.toUpperCase();
 
-    if (ByTag[tagName]) Object.extend(methods, ByTag[tagName]);
+        if (ByTag[tagName]) Object.extend(methods, ByTag[tagName]);
 
-    extendElementWith(element, methods);
+        extendElementWith(element, methods);
 
-    element._extendedByPrototype = Prototype.emptyFunction;
-    return element;
+        element._extendedByPrototype = Prototype.emptyFunction;
+        return element;
 
-  }, {
-    refresh: function() {
-      if (!Prototype.BrowserFeatures.ElementExtensions) {
-        Object.extend(Methods, Element.Methods);
-        Object.extend(Methods, Element.Methods.Simulated);
+      }, {
+        refresh: function() {
+          if (!Prototype.BrowserFeatures.ElementExtensions) {
+            Object.extend(Methods, Element.Methods);
+            Object.extend(Methods, Element.Methods.Simulated);
+          }
+        }
+      });
+
+      extend.refresh();
+      return extend;
+    })();
+
+    if (document.documentElement.hasAttribute) {
+      Element.hasAttribute = function(element, attribute) {
+        return element.hasAttribute(attribute);
+      };
+    }
+    else {
+      Element.hasAttribute = Element.Methods.Simulated.hasAttribute;
+    }
+
+    Element.addMethods = function(methods) {
+      var F = Prototype.BrowserFeatures, T = Element.Methods.ByTag;
+
+      if (!methods) {
+        Object.extend(Form, Form.Methods);
+        Object.extend(Form.Element, Form.Element.Methods);
+        Object.extend(Element.Methods.ByTag, {
+          "FORM":     Object.clone(Form.Methods),
+          "INPUT":    Object.clone(Form.Element.Methods),
+          "SELECT":   Object.clone(Form.Element.Methods),
+          "TEXTAREA": Object.clone(Form.Element.Methods),
+          "BUTTON":   Object.clone(Form.Element.Methods)
+        });
       }
-    }
-  });
 
-  extend.refresh();
-  return extend;
-})();
+      if (arguments.length == 2) {
+        var tagName = methods;
+        methods = arguments[1];
+      }
 
-if (document.documentElement.hasAttribute) {
-  Element.hasAttribute = function(element, attribute) {
-    return element.hasAttribute(attribute);
-  };
-}
-else {
-  Element.hasAttribute = Element.Methods.Simulated.hasAttribute;
-}
+      if (!tagName) Object.extend(Element.Methods, methods || { });
+      else {
+        if (Object.isArray(tagName)) tagName.each(extend);
+        else extend(tagName);
+      }
 
-Element.addMethods = function(methods) {
-  var F = Prototype.BrowserFeatures, T = Element.Methods.ByTag;
+      function extend(tagName) {
+        tagName = tagName.toUpperCase();
+        if (!Element.Methods.ByTag[tagName])
+          Element.Methods.ByTag[tagName] = { };
+        Object.extend(Element.Methods.ByTag[tagName], methods);
+      }
 
-  if (!methods) {
-    Object.extend(Form, Form.Methods);
-    Object.extend(Form.Element, Form.Element.Methods);
-    Object.extend(Element.Methods.ByTag, {
-      "FORM":     Object.clone(Form.Methods),
-      "INPUT":    Object.clone(Form.Element.Methods),
-      "SELECT":   Object.clone(Form.Element.Methods),
-      "TEXTAREA": Object.clone(Form.Element.Methods),
-      "BUTTON":   Object.clone(Form.Element.Methods)
-    });
-  }
+      function copy(methods, destination, onlyIfAbsent) {
+        onlyIfAbsent = onlyIfAbsent || false;
+        for (var property in methods) {
+          var value = methods[property];
+          if (!Object.isFunction(value)) continue;
+          if (!onlyIfAbsent || !(property in destination))
+            destination[property] = value.methodize();
+        }
+      }
 
-  if (arguments.length == 2) {
-    var tagName = methods;
-    methods = arguments[1];
-  }
+      function findDOMClass(tagName) {
+        var klass;
+        var trans = {
+          "OPTGROUP": "OptGroup", "TEXTAREA": "TextArea", "P": "Paragraph",
+          "FIELDSET": "FieldSet", "UL": "UList", "OL": "OList", "DL": "DList",
+          "DIR": "Directory", "H1": "Heading", "H2": "Heading", "H3": "Heading",
+          "H4": "Heading", "H5": "Heading", "H6": "Heading", "Q": "Quote",
+          "INS": "Mod", "DEL": "Mod", "A": "Anchor", "IMG": "Image", "CAPTION":
+          "TableCaption", "COL": "TableCol", "COLGROUP": "TableCol", "THEAD":
+          "TableSection", "TFOOT": "TableSection", "TBODY": "TableSection", "TR":
+          "TableRow", "TH": "TableCell", "TD": "TableCell", "FRAMESET":
+          "FrameSet", "IFRAME": "IFrame"
+        };
+        if (trans[tagName]) klass = 'HTML' + trans[tagName] + 'Element';
+        if (window[klass]) return window[klass];
+        klass = 'HTML' + tagName + 'Element';
+        if (window[klass]) return window[klass];
+        klass = 'HTML' + tagName.capitalize() + 'Element';
+        if (window[klass]) return window[klass];
 
-  if (!tagName) Object.extend(Element.Methods, methods || { });
-  else {
-    if (Object.isArray(tagName)) tagName.each(extend);
-    else extend(tagName);
-  }
-
-  function extend(tagName) {
-    tagName = tagName.toUpperCase();
-    if (!Element.Methods.ByTag[tagName])
-      Element.Methods.ByTag[tagName] = { };
-    Object.extend(Element.Methods.ByTag[tagName], methods);
-  }
-
-  function copy(methods, destination, onlyIfAbsent) {
-    onlyIfAbsent = onlyIfAbsent || false;
-    for (var property in methods) {
-      var value = methods[property];
-      if (!Object.isFunction(value)) continue;
-      if (!onlyIfAbsent || !(property in destination))
-        destination[property] = value.methodize();
-    }
-  }
-
-  function findDOMClass(tagName) {
-    var klass;
-    var trans = {
-      "OPTGROUP": "OptGroup", "TEXTAREA": "TextArea", "P": "Paragraph",
-      "FIELDSET": "FieldSet", "UL": "UList", "OL": "OList", "DL": "DList",
-      "DIR": "Directory", "H1": "Heading", "H2": "Heading", "H3": "Heading",
-      "H4": "Heading", "H5": "Heading", "H6": "Heading", "Q": "Quote",
-      "INS": "Mod", "DEL": "Mod", "A": "Anchor", "IMG": "Image", "CAPTION":
-      "TableCaption", "COL": "TableCol", "COLGROUP": "TableCol", "THEAD":
-      "TableSection", "TFOOT": "TableSection", "TBODY": "TableSection", "TR":
-      "TableRow", "TH": "TableCell", "TD": "TableCell", "FRAMESET":
-      "FrameSet", "IFRAME": "IFrame"
-    };
-    if (trans[tagName]) klass = 'HTML' + trans[tagName] + 'Element';
-    if (window[klass]) return window[klass];
-    klass = 'HTML' + tagName + 'Element';
-    if (window[klass]) return window[klass];
-    klass = 'HTML' + tagName.capitalize() + 'Element';
-    if (window[klass]) return window[klass];
-
-    var element = document.createElement(tagName),
+        var element = document.createElement(tagName),
         proto = element['__proto__'] || element.constructor.prototype;
 
-    element = null;
-    return proto;
-  }
-
-  var elementPrototype = window.HTMLElement ? HTMLElement.prototype :
-   Element.prototype;
-
-  if (F.ElementExtensions) {
-    copy(Element.Methods, elementPrototype);
-    copy(Element.Methods.Simulated, elementPrototype, true);
-  }
-
-  if (F.SpecificElementExtensions) {
-    for (var tag in Element.Methods.ByTag) {
-      var klass = findDOMClass(tag);
-      if (Object.isUndefined(klass)) continue;
-      copy(T[tag], klass.prototype);
-    }
-  }
-
-  Object.extend(Element, Element.Methods);
-  delete Element.ByTag;
-
-  if (Element.extend.refresh) Element.extend.refresh();
-  Element.cache = { };
-};
-
-
-document.viewport = {
-
-  getDimensions: function() {
-    return { width: this.getWidth(), height: this.getHeight() };
-  },
-
-  getScrollOffsets: function() {
-    return Element._returnOffset(
-      window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-      window.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop);
-  }
-};
-
-(function(viewport) {
-  var B = Prototype.Browser, doc = document, element, property = {};
-
-  function getRootElement() {
-    if (B.WebKit && !doc.evaluate)
-      return document;
-
-    if (B.Opera && window.parseFloat(window.opera.version()) < 9.5)
-      return document.body;
-
-    return document.documentElement;
-  }
-
-  function define(D) {
-    if (!element) element = getRootElement();
-
-    property[D] = 'client' + D;
-
-    viewport['get' + D] = function() { return element[property[D]] };
-    return viewport['get' + D]();
-  }
-
-  viewport.getWidth  = define.curry('Width');
-
-  viewport.getHeight = define.curry('Height');
-})(document.viewport);
-
-
-Element.Storage = {
-  UID: 1
-};
-
-Element.addMethods({
-  getStorage: function(element) {
-    if (!(element = $(element))) return;
-
-    var uid;
-    if (element === window) {
-      uid = 0;
-    } else {
-      if (typeof element._prototypeUID === "undefined")
-        element._prototypeUID = Element.Storage.UID++;
-      uid = element._prototypeUID;
-    }
-
-    if (!Element.Storage[uid])
-      Element.Storage[uid] = $H();
-
-    return Element.Storage[uid];
-  },
-
-  store: function(element, key, value) {
-    if (!(element = $(element))) return;
-
-    if (arguments.length === 2) {
-      Element.getStorage(element).update(key);
-    } else {
-      Element.getStorage(element).set(key, value);
-    }
-
-    return element;
-  },
-
-  retrieve: function(element, key, defaultValue) {
-    if (!(element = $(element))) return;
-    var hash = Element.getStorage(element), value = hash.get(key);
-
-    if (Object.isUndefined(value)) {
-      hash.set(key, defaultValue);
-      value = defaultValue;
-    }
-
-    return value;
-  },
-
-  clone: function(element, deep) {
-    if (!(element = $(element))) return;
-    var clone = element.cloneNode(deep);
-    clone._prototypeUID = void 0;
-    if (deep) {
-      var descendants = Element.select(clone, '*'),
-          i = descendants.length;
-      while (i--) {
-        descendants[i]._prototypeUID = void 0;
+        element = null;
+        return proto;
       }
+
+      var elementPrototype = window.HTMLElement ? HTMLElement.prototype :
+      Element.prototype;
+
+      if (F.ElementExtensions) {
+        copy(Element.Methods, elementPrototype);
+        copy(Element.Methods.Simulated, elementPrototype, true);
+      }
+
+      if (F.SpecificElementExtensions) {
+        for (var tag in Element.Methods.ByTag) {
+          var klass = findDOMClass(tag);
+          if (Object.isUndefined(klass)) continue;
+          copy(T[tag], klass.prototype);
+        }
+      }
+
+      Object.extend(Element, Element.Methods);
+      delete Element.ByTag;
+
+      if (Element.extend.refresh) Element.extend.refresh();
+      Element.cache = { };
+    };
+
+
+    document.viewport = {
+
+      getDimensions: function() {
+        return { width: this.getWidth(), height: this.getHeight() };
+      },
+
+      getScrollOffsets: function() {
+        return Element._returnOffset(
+          window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+          window.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop);
+      }
+    };
+
+    (function(viewport) {
+      var B = Prototype.Browser, doc = document, element, property = {};
+
+      function getRootElement() {
+        if (B.WebKit && !doc.evaluate)
+          return document;
+
+        if (B.Opera && window.parseFloat(window.opera.version()) < 9.5)
+          return document.body;
+
+        return document.documentElement;
+      }
+
+      function define(D) {
+        if (!element) element = getRootElement();
+
+        property[D] = 'client' + D;
+
+        viewport['get' + D] = function() { return element[property[D]] };
+        return viewport['get' + D]();
+      }
+
+      viewport.getWidth  = define.curry('Width');
+
+      viewport.getHeight = define.curry('Height');
+    })(document.viewport);
+
+
+    Element.Storage = {
+      UID: 1
+    };
+
+    Element.addMethods({
+      getStorage: function(element) {
+        if (!(element = $(element))) return;
+
+        var uid;
+        if (element === window) {
+          uid = 0;
+        } else {
+          if (typeof element._prototypeUID === "undefined")
+            element._prototypeUID = Element.Storage.UID++;
+          uid = element._prototypeUID;
+        }
+
+        if (!Element.Storage[uid])
+          Element.Storage[uid] = $H();
+
+        return Element.Storage[uid];
+      },
+
+      store: function(element, key, value) {
+        if (!(element = $(element))) return;
+
+        if (arguments.length === 2) {
+          Element.getStorage(element).update(key);
+        } else {
+          Element.getStorage(element).set(key, value);
+        }
+
+        return element;
+      },
+
+      retrieve: function(element, key, defaultValue) {
+        if (!(element = $(element))) return;
+        var hash = Element.getStorage(element), value = hash.get(key);
+
+        if (Object.isUndefined(value)) {
+          hash.set(key, defaultValue);
+          value = defaultValue;
+        }
+
+        return value;
+      },
+
+      clone: function(element, deep) {
+        if (!(element = $(element))) return;
+        var clone = element.cloneNode(deep);
+        clone._prototypeUID = void 0;
+        if (deep) {
+          var descendants = Element.select(clone, '*'),
+          i = descendants.length;
+          while (i--) {
+            descendants[i]._prototypeUID = void 0;
+          }
+        }
+        return Element.extend(clone);
+      },
+
+      purge: function(element) {
+        if (!(element = $(element))) return;
+        var purgeElement = Element._purgeElement;
+
+        purgeElement(element);
+
+        var descendants = element.getElementsByTagName('*'),
+        i = descendants.length;
+
+        while (i--) purgeElement(descendants[i]);
+
+        return null;
+      }
+    });
+
+    (function() {
+
+      function toDecimal(pctString) {
+        var match = pctString.match(/^(\d+)%?$/i);
+        if (!match) return null;
+        return (Number(match[1]) / 100);
+      }
+
+      function getPixelValue(value, property, context) {
+        var element = null;
+        if (Object.isElement(value)) {
+          element = value;
+          value = element.getStyle(property);
+        }
+
+        if (value === null) {
+          return null;
+        }
+
+        if ((/^(?:-)?\d+(\.\d+)?(px)?$/i).test(value)) {
+          return window.parseFloat(value);
+        }
+
+        var isPercentage = value.include('%'), isViewport = (context === document.viewport);
+
+        if (/\d/.test(value) && element && element.runtimeStyle && !(isPercentage && isViewport)) {
+          var style = element.style.left, rStyle = element.runtimeStyle.left;
+          element.runtimeStyle.left = element.currentStyle.left;
+          element.style.left = value || 0;
+          value = element.style.pixelLeft;
+          element.style.left = style;
+          element.runtimeStyle.left = rStyle;
+
+          return value;
+        }
+
+        if (element && isPercentage) {
+          context = context || element.parentNode;
+          var decimal = toDecimal(value);
+          var whole = null;
+          var position = element.getStyle('position');
+
+          var isHorizontal = property.include('left') || property.include('right') ||
+          property.include('width');
+
+          var isVertical =  property.include('top') || property.include('bottom') ||
+          property.include('height');
+
+          if (context === document.viewport) {
+            if (isHorizontal) {
+              whole = document.viewport.getWidth();
+            } else if (isVertical) {
+              whole = document.viewport.getHeight();
+            }
+          } else {
+            if (isHorizontal) {
+              whole = $(context).measure('width');
+            } else if (isVertical) {
+              whole = $(context).measure('height');
+            }
+          }
+
+          return (whole === null) ? 0 : whole * decimal;
+        }
+
+        return 0;
+      }
+
+      function toCSSPixels(number) {
+        if (Object.isString(number) && number.endsWith('px')) {
+          return number;
+        }
+        return number + 'px';
+      }
+
+      function isDisplayed(element) {
+        var originalElement = element;
+        while (element && element.parentNode) {
+          var display = element.getStyle('display');
+          if (display === 'none') {
+            return false;
+          }
+          element = $(element.parentNode);
+        }
+        return true;
+      }
+
+      var hasLayout = Prototype.K;
+      if ('currentStyle' in document.documentElement) {
+        hasLayout = function(element) {
+          if (!element.currentStyle.hasLayout) {
+            element.style.zoom = 1;
+          }
+          return element;
+        };
+      }
+
+      function cssNameFor(key) {
+        if (key.include('border')) key = key + '-width';
+        return key.camelize();
+      }
+
+      Element.Layout = Class.create(Hash, {
+        initialize: function($super, element, preCompute) {
+          $super();
+          this.element = $(element);
+
+          Element.Layout.PROPERTIES.each( function(property) {
+            this._set(property, null);
+          }, this);
+
+          if (preCompute) {
+            this._preComputing = true;
+            this._begin();
+            Element.Layout.PROPERTIES.each( this._compute, this );
+            this._end();
+            this._preComputing = false;
+          }
+        },
+
+        _set: function(property, value) {
+          return Hash.prototype.set.call(this, property, value);
+        },
+
+        set: function(property, value) {
+          throw "Properties of Element.Layout are read-only.";
+        },
+
+        get: function($super, property) {
+          var value = $super(property);
+          return value === null ? this._compute(property) : value;
+        },
+
+        _begin: function() {
+          if (this._prepared) return;
+
+          var element = this.element;
+          if (isDisplayed(element)) {
+            this._prepared = true;
+            return;
+          }
+
+          var originalStyles = {
+            position:   element.style.position   || '',
+            width:      element.style.width      || '',
+            visibility: element.style.visibility || '',
+            display:    element.style.display    || ''
+          };
+
+          element.store('prototype_original_styles', originalStyles);
+
+          var position = element.getStyle('position'),
+          width = element.getStyle('width');
+
+          if (width === "0px" || width === null) {
+            element.style.display = 'block';
+            width = element.getStyle('width');
+          }
+
+          var context = (position === 'fixed') ? document.viewport :
+          element.parentNode;
+
+          element.setStyle({
+            position:   'absolute',
+            visibility: 'hidden',
+            display:    'block'
+          });
+
+          var positionedWidth = element.getStyle('width');
+
+          var newWidth;
+          if (width && (positionedWidth === width)) {
+            newWidth = getPixelValue(element, 'width', context);
+          } else if (position === 'absolute' || position === 'fixed') {
+            newWidth = getPixelValue(element, 'width', context);
+          } else {
+            var parent = element.parentNode, pLayout = $(parent).getLayout();
+
+            newWidth = pLayout.get('width') -
+            this.get('margin-left') -
+            this.get('border-left') -
+            this.get('padding-left') -
+            this.get('padding-right') -
+            this.get('border-right') -
+            this.get('margin-right');
+          }
+
+          element.setStyle({ width: newWidth + 'px' });
+
+          this._prepared = true;
+        },
+
+        _end: function() {
+          var element = this.element;
+          var originalStyles = element.retrieve('prototype_original_styles');
+          element.store('prototype_original_styles', null);
+          element.setStyle(originalStyles);
+          this._prepared = false;
+        },
+
+        _compute: function(property) {
+          var COMPUTATIONS = Element.Layout.COMPUTATIONS;
+          if (!(property in COMPUTATIONS)) {
+            throw "Property not found.";
+          }
+
+          return this._set(property, COMPUTATIONS[property].call(this, this.element));
+        },
+
+        toObject: function() {
+          var args = $A(arguments);
+          var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
+          args.join(' ').split(' ');
+          var obj = {};
+          keys.each( function(key) {
+            if (!Element.Layout.PROPERTIES.include(key)) return;
+            var value = this.get(key);
+            if (value != null) obj[key] = value;
+          }, this);
+          return obj;
+        },
+
+        toHash: function() {
+          var obj = this.toObject.apply(this, arguments);
+          return new Hash(obj);
+        },
+
+        toCSS: function() {
+          var args = $A(arguments);
+          var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
+          args.join(' ').split(' ');
+          var css = {};
+
+          keys.each( function(key) {
+            if (!Element.Layout.PROPERTIES.include(key)) return;
+            if (Element.Layout.COMPOSITE_PROPERTIES.include(key)) return;
+
+            var value = this.get(key);
+            if (value != null) css[cssNameFor(key)] = value + 'px';
+          }, this);
+          return css;
+        },
+
+        inspect: function() {
+          return "#<Element.Layout>";
+        }
+      });
+
+Object.extend(Element.Layout, {
+  PROPERTIES: $w('height width top left right bottom border-left border-right border-top border-bottom padding-left padding-right padding-top padding-bottom margin-top margin-bottom margin-left margin-right padding-box-width padding-box-height border-box-width border-box-height margin-box-width margin-box-height'),
+
+  COMPOSITE_PROPERTIES: $w('padding-box-width padding-box-height margin-box-width margin-box-height border-box-width border-box-height'),
+
+  COMPUTATIONS: {
+    'height': function(element) {
+      if (!this._preComputing) this._begin();
+
+      var bHeight = this.get('border-box-height');
+      if (bHeight <= 0) {
+        if (!this._preComputing) this._end();
+        return 0;
+      }
+
+      var bTop = this.get('border-top'),
+      bBottom = this.get('border-bottom');
+
+      var pTop = this.get('padding-top'),
+      pBottom = this.get('padding-bottom');
+
+      if (!this._preComputing) this._end();
+
+      return bHeight - bTop - bBottom - pTop - pBottom;
+    },
+
+    'width': function(element) {
+      if (!this._preComputing) this._begin();
+
+      var bWidth = this.get('border-box-width');
+      if (bWidth <= 0) {
+        if (!this._preComputing) this._end();
+        return 0;
+      }
+
+      var bLeft = this.get('border-left'),
+      bRight = this.get('border-right');
+
+      var pLeft = this.get('padding-left'),
+      pRight = this.get('padding-right');
+
+      if (!this._preComputing) this._end();
+
+      return bWidth - bLeft - bRight - pLeft - pRight;
+    },
+
+    'padding-box-height': function(element) {
+      var height = this.get('height'),
+      pTop = this.get('padding-top'),
+      pBottom = this.get('padding-bottom');
+
+      return height + pTop + pBottom;
+    },
+
+    'padding-box-width': function(element) {
+      var width = this.get('width'),
+      pLeft = this.get('padding-left'),
+      pRight = this.get('padding-right');
+
+      return width + pLeft + pRight;
+    },
+
+    'border-box-height': function(element) {
+      if (!this._preComputing) this._begin();
+      var height = element.offsetHeight;
+      if (!this._preComputing) this._end();
+      return height;
+    },
+
+    'border-box-width': function(element) {
+      if (!this._preComputing) this._begin();
+      var width = element.offsetWidth;
+      if (!this._preComputing) this._end();
+      return width;
+    },
+
+    'margin-box-height': function(element) {
+      var bHeight = this.get('border-box-height'),
+      mTop = this.get('margin-top'),
+      mBottom = this.get('margin-bottom');
+
+      if (bHeight <= 0) return 0;
+
+      return bHeight + mTop + mBottom;
+    },
+
+    'margin-box-width': function(element) {
+      var bWidth = this.get('border-box-width'),
+      mLeft = this.get('margin-left'),
+      mRight = this.get('margin-right');
+
+      if (bWidth <= 0) return 0;
+
+      return bWidth + mLeft + mRight;
+    },
+
+    'top': function(element) {
+      var offset = element.positionedOffset();
+      return offset.top;
+    },
+
+    'bottom': function(element) {
+      var offset = element.positionedOffset(),
+      parent = element.getOffsetParent(),
+      pHeight = parent.measure('height');
+
+      var mHeight = this.get('border-box-height');
+
+      return pHeight - mHeight - offset.top;
+    },
+
+    'left': function(element) {
+      var offset = element.positionedOffset();
+      return offset.left;
+    },
+
+    'right': function(element) {
+      var offset = element.positionedOffset(),
+      parent = element.getOffsetParent(),
+      pWidth = parent.measure('width');
+
+      var mWidth = this.get('border-box-width');
+
+      return pWidth - mWidth - offset.left;
+    },
+
+    'padding-top': function(element) {
+      return getPixelValue(element, 'paddingTop');
+    },
+
+    'padding-bottom': function(element) {
+      return getPixelValue(element, 'paddingBottom');
+    },
+
+    'padding-left': function(element) {
+      return getPixelValue(element, 'paddingLeft');
+    },
+
+    'padding-right': function(element) {
+      return getPixelValue(element, 'paddingRight');
+    },
+
+    'border-top': function(element) {
+      return getPixelValue(element, 'borderTopWidth');
+    },
+
+    'border-bottom': function(element) {
+      return getPixelValue(element, 'borderBottomWidth');
+    },
+
+    'border-left': function(element) {
+      return getPixelValue(element, 'borderLeftWidth');
+    },
+
+    'border-right': function(element) {
+      return getPixelValue(element, 'borderRightWidth');
+    },
+
+    'margin-top': function(element) {
+      return getPixelValue(element, 'marginTop');
+    },
+
+    'margin-bottom': function(element) {
+      return getPixelValue(element, 'marginBottom');
+    },
+
+    'margin-left': function(element) {
+      return getPixelValue(element, 'marginLeft');
+    },
+
+    'margin-right': function(element) {
+      return getPixelValue(element, 'marginRight');
     }
-    return Element.extend(clone);
-  },
-
-  purge: function(element) {
-    if (!(element = $(element))) return;
-    var purgeElement = Element._purgeElement;
-
-    purgeElement(element);
-
-    var descendants = element.getElementsByTagName('*'),
-     i = descendants.length;
-
-    while (i--) purgeElement(descendants[i]);
-
-    return null;
   }
 });
 
-(function() {
+if ('getBoundingClientRect' in document.documentElement) {
+  Object.extend(Element.Layout.COMPUTATIONS, {
+    'right': function(element) {
+      var parent = hasLayout(element.getOffsetParent());
+      var rect = element.getBoundingClientRect(),
+      pRect = parent.getBoundingClientRect();
 
-  function toDecimal(pctString) {
-    var match = pctString.match(/^(\d+)%?$/i);
-    if (!match) return null;
-    return (Number(match[1]) / 100);
-  }
-
-  function getPixelValue(value, property, context) {
-    var element = null;
-    if (Object.isElement(value)) {
-      element = value;
-      value = element.getStyle(property);
-    }
-
-    if (value === null) {
-      return null;
-    }
-
-    if ((/^(?:-)?\d+(\.\d+)?(px)?$/i).test(value)) {
-      return window.parseFloat(value);
-    }
-
-    var isPercentage = value.include('%'), isViewport = (context === document.viewport);
-
-    if (/\d/.test(value) && element && element.runtimeStyle && !(isPercentage && isViewport)) {
-      var style = element.style.left, rStyle = element.runtimeStyle.left;
-      element.runtimeStyle.left = element.currentStyle.left;
-      element.style.left = value || 0;
-      value = element.style.pixelLeft;
-      element.style.left = style;
-      element.runtimeStyle.left = rStyle;
-
-      return value;
-    }
-
-    if (element && isPercentage) {
-      context = context || element.parentNode;
-      var decimal = toDecimal(value);
-      var whole = null;
-      var position = element.getStyle('position');
-
-      var isHorizontal = property.include('left') || property.include('right') ||
-       property.include('width');
-
-      var isVertical =  property.include('top') || property.include('bottom') ||
-        property.include('height');
-
-      if (context === document.viewport) {
-        if (isHorizontal) {
-          whole = document.viewport.getWidth();
-        } else if (isVertical) {
-          whole = document.viewport.getHeight();
-        }
-      } else {
-        if (isHorizontal) {
-          whole = $(context).measure('width');
-        } else if (isVertical) {
-          whole = $(context).measure('height');
-        }
-      }
-
-      return (whole === null) ? 0 : whole * decimal;
-    }
-
-    return 0;
-  }
-
-  function toCSSPixels(number) {
-    if (Object.isString(number) && number.endsWith('px')) {
-      return number;
-    }
-    return number + 'px';
-  }
-
-  function isDisplayed(element) {
-    var originalElement = element;
-    while (element && element.parentNode) {
-      var display = element.getStyle('display');
-      if (display === 'none') {
-        return false;
-      }
-      element = $(element.parentNode);
-    }
-    return true;
-  }
-
-  var hasLayout = Prototype.K;
-  if ('currentStyle' in document.documentElement) {
-    hasLayout = function(element) {
-      if (!element.currentStyle.hasLayout) {
-        element.style.zoom = 1;
-      }
-      return element;
-    };
-  }
-
-  function cssNameFor(key) {
-    if (key.include('border')) key = key + '-width';
-    return key.camelize();
-  }
-
-  Element.Layout = Class.create(Hash, {
-    initialize: function($super, element, preCompute) {
-      $super();
-      this.element = $(element);
-
-      Element.Layout.PROPERTIES.each( function(property) {
-        this._set(property, null);
-      }, this);
-
-      if (preCompute) {
-        this._preComputing = true;
-        this._begin();
-        Element.Layout.PROPERTIES.each( this._compute, this );
-        this._end();
-        this._preComputing = false;
-      }
+      return (pRect.right - rect.right).round();
     },
 
-    _set: function(property, value) {
-      return Hash.prototype.set.call(this, property, value);
-    },
+    'bottom': function(element) {
+      var parent = hasLayout(element.getOffsetParent());
+      var rect = element.getBoundingClientRect(),
+      pRect = parent.getBoundingClientRect();
 
-    set: function(property, value) {
-      throw "Properties of Element.Layout are read-only.";
-    },
-
-    get: function($super, property) {
-      var value = $super(property);
-      return value === null ? this._compute(property) : value;
-    },
-
-    _begin: function() {
-      if (this._prepared) return;
-
-      var element = this.element;
-      if (isDisplayed(element)) {
-        this._prepared = true;
-        return;
-      }
-
-      var originalStyles = {
-        position:   element.style.position   || '',
-        width:      element.style.width      || '',
-        visibility: element.style.visibility || '',
-        display:    element.style.display    || ''
-      };
-
-      element.store('prototype_original_styles', originalStyles);
-
-      var position = element.getStyle('position'),
-       width = element.getStyle('width');
-
-      if (width === "0px" || width === null) {
-        element.style.display = 'block';
-        width = element.getStyle('width');
-      }
-
-      var context = (position === 'fixed') ? document.viewport :
-       element.parentNode;
-
-      element.setStyle({
-        position:   'absolute',
-        visibility: 'hidden',
-        display:    'block'
-      });
-
-      var positionedWidth = element.getStyle('width');
-
-      var newWidth;
-      if (width && (positionedWidth === width)) {
-        newWidth = getPixelValue(element, 'width', context);
-      } else if (position === 'absolute' || position === 'fixed') {
-        newWidth = getPixelValue(element, 'width', context);
-      } else {
-        var parent = element.parentNode, pLayout = $(parent).getLayout();
-
-        newWidth = pLayout.get('width') -
-         this.get('margin-left') -
-         this.get('border-left') -
-         this.get('padding-left') -
-         this.get('padding-right') -
-         this.get('border-right') -
-         this.get('margin-right');
-      }
-
-      element.setStyle({ width: newWidth + 'px' });
-
-      this._prepared = true;
-    },
-
-    _end: function() {
-      var element = this.element;
-      var originalStyles = element.retrieve('prototype_original_styles');
-      element.store('prototype_original_styles', null);
-      element.setStyle(originalStyles);
-      this._prepared = false;
-    },
-
-    _compute: function(property) {
-      var COMPUTATIONS = Element.Layout.COMPUTATIONS;
-      if (!(property in COMPUTATIONS)) {
-        throw "Property not found.";
-      }
-
-      return this._set(property, COMPUTATIONS[property].call(this, this.element));
-    },
-
-    toObject: function() {
-      var args = $A(arguments);
-      var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
-       args.join(' ').split(' ');
-      var obj = {};
-      keys.each( function(key) {
-        if (!Element.Layout.PROPERTIES.include(key)) return;
-        var value = this.get(key);
-        if (value != null) obj[key] = value;
-      }, this);
-      return obj;
-    },
-
-    toHash: function() {
-      var obj = this.toObject.apply(this, arguments);
-      return new Hash(obj);
-    },
-
-    toCSS: function() {
-      var args = $A(arguments);
-      var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
-       args.join(' ').split(' ');
-      var css = {};
-
-      keys.each( function(key) {
-        if (!Element.Layout.PROPERTIES.include(key)) return;
-        if (Element.Layout.COMPOSITE_PROPERTIES.include(key)) return;
-
-        var value = this.get(key);
-        if (value != null) css[cssNameFor(key)] = value + 'px';
-      }, this);
-      return css;
-    },
-
-    inspect: function() {
-      return "#<Element.Layout>";
+      return (pRect.bottom - rect.bottom).round();
     }
   });
+}
 
-  Object.extend(Element.Layout, {
-    PROPERTIES: $w('height width top left right bottom border-left border-right border-top border-bottom padding-left padding-right padding-top padding-bottom margin-top margin-bottom margin-left margin-right padding-box-width padding-box-height border-box-width border-box-height margin-box-width margin-box-height'),
+Element.Offset = Class.create({
+  initialize: function(left, top) {
+    this.left = left.round();
+    this.top  = top.round();
 
-    COMPOSITE_PROPERTIES: $w('padding-box-width padding-box-height margin-box-width margin-box-height border-box-width border-box-height'),
+    this[0] = this.left;
+    this[1] = this.top;
+  },
 
-    COMPUTATIONS: {
-      'height': function(element) {
-        if (!this._preComputing) this._begin();
-
-        var bHeight = this.get('border-box-height');
-        if (bHeight <= 0) {
-          if (!this._preComputing) this._end();
-          return 0;
-        }
-
-        var bTop = this.get('border-top'),
-         bBottom = this.get('border-bottom');
-
-        var pTop = this.get('padding-top'),
-         pBottom = this.get('padding-bottom');
-
-        if (!this._preComputing) this._end();
-
-        return bHeight - bTop - bBottom - pTop - pBottom;
-      },
-
-      'width': function(element) {
-        if (!this._preComputing) this._begin();
-
-        var bWidth = this.get('border-box-width');
-        if (bWidth <= 0) {
-          if (!this._preComputing) this._end();
-          return 0;
-        }
-
-        var bLeft = this.get('border-left'),
-         bRight = this.get('border-right');
-
-        var pLeft = this.get('padding-left'),
-         pRight = this.get('padding-right');
-
-        if (!this._preComputing) this._end();
-
-        return bWidth - bLeft - bRight - pLeft - pRight;
-      },
-
-      'padding-box-height': function(element) {
-        var height = this.get('height'),
-         pTop = this.get('padding-top'),
-         pBottom = this.get('padding-bottom');
-
-        return height + pTop + pBottom;
-      },
-
-      'padding-box-width': function(element) {
-        var width = this.get('width'),
-         pLeft = this.get('padding-left'),
-         pRight = this.get('padding-right');
-
-        return width + pLeft + pRight;
-      },
-
-      'border-box-height': function(element) {
-        if (!this._preComputing) this._begin();
-        var height = element.offsetHeight;
-        if (!this._preComputing) this._end();
-        return height;
-      },
-
-      'border-box-width': function(element) {
-        if (!this._preComputing) this._begin();
-        var width = element.offsetWidth;
-        if (!this._preComputing) this._end();
-        return width;
-      },
-
-      'margin-box-height': function(element) {
-        var bHeight = this.get('border-box-height'),
-         mTop = this.get('margin-top'),
-         mBottom = this.get('margin-bottom');
-
-        if (bHeight <= 0) return 0;
-
-        return bHeight + mTop + mBottom;
-      },
-
-      'margin-box-width': function(element) {
-        var bWidth = this.get('border-box-width'),
-         mLeft = this.get('margin-left'),
-         mRight = this.get('margin-right');
-
-        if (bWidth <= 0) return 0;
-
-        return bWidth + mLeft + mRight;
-      },
-
-      'top': function(element) {
-        var offset = element.positionedOffset();
-        return offset.top;
-      },
-
-      'bottom': function(element) {
-        var offset = element.positionedOffset(),
-         parent = element.getOffsetParent(),
-         pHeight = parent.measure('height');
-
-        var mHeight = this.get('border-box-height');
-
-        return pHeight - mHeight - offset.top;
-      },
-
-      'left': function(element) {
-        var offset = element.positionedOffset();
-        return offset.left;
-      },
-
-      'right': function(element) {
-        var offset = element.positionedOffset(),
-         parent = element.getOffsetParent(),
-         pWidth = parent.measure('width');
-
-        var mWidth = this.get('border-box-width');
-
-        return pWidth - mWidth - offset.left;
-      },
-
-      'padding-top': function(element) {
-        return getPixelValue(element, 'paddingTop');
-      },
-
-      'padding-bottom': function(element) {
-        return getPixelValue(element, 'paddingBottom');
-      },
-
-      'padding-left': function(element) {
-        return getPixelValue(element, 'paddingLeft');
-      },
-
-      'padding-right': function(element) {
-        return getPixelValue(element, 'paddingRight');
-      },
-
-      'border-top': function(element) {
-        return getPixelValue(element, 'borderTopWidth');
-      },
-
-      'border-bottom': function(element) {
-        return getPixelValue(element, 'borderBottomWidth');
-      },
-
-      'border-left': function(element) {
-        return getPixelValue(element, 'borderLeftWidth');
-      },
-
-      'border-right': function(element) {
-        return getPixelValue(element, 'borderRightWidth');
-      },
-
-      'margin-top': function(element) {
-        return getPixelValue(element, 'marginTop');
-      },
-
-      'margin-bottom': function(element) {
-        return getPixelValue(element, 'marginBottom');
-      },
-
-      'margin-left': function(element) {
-        return getPixelValue(element, 'marginLeft');
-      },
-
-      'margin-right': function(element) {
-        return getPixelValue(element, 'marginRight');
-      }
-    }
-  });
-
-  if ('getBoundingClientRect' in document.documentElement) {
-    Object.extend(Element.Layout.COMPUTATIONS, {
-      'right': function(element) {
-        var parent = hasLayout(element.getOffsetParent());
-        var rect = element.getBoundingClientRect(),
-         pRect = parent.getBoundingClientRect();
-
-        return (pRect.right - rect.right).round();
-      },
-
-      'bottom': function(element) {
-        var parent = hasLayout(element.getOffsetParent());
-        var rect = element.getBoundingClientRect(),
-         pRect = parent.getBoundingClientRect();
-
-        return (pRect.bottom - rect.bottom).round();
-      }
-    });
-  }
-
-  Element.Offset = Class.create({
-    initialize: function(left, top) {
-      this.left = left.round();
-      this.top  = top.round();
-
-      this[0] = this.left;
-      this[1] = this.top;
-    },
-
-    relativeTo: function(offset) {
-      return new Element.Offset(
-        this.left - offset.left,
-        this.top  - offset.top
+  relativeTo: function(offset) {
+    return new Element.Offset(
+      this.left - offset.left,
+      this.top  - offset.top
       );
-    },
+  },
 
-    inspect: function() {
-      return "#<Element.Offset left: #{left} top: #{top}>".interpolate(this);
-    },
+  inspect: function() {
+    return "#<Element.Offset left: #{left} top: #{top}>".interpolate(this);
+  },
 
-    toString: function() {
-      return "[#{left}, #{top}]".interpolate(this);
-    },
+  toString: function() {
+    return "[#{left}, #{top}]".interpolate(this);
+  },
 
-    toArray: function() {
-      return [this.left, this.top];
-    }
-  });
+  toArray: function() {
+    return [this.left, this.top];
+  }
+});
 
-  function getLayout(element, preCompute) {
-    return new Element.Layout(element, preCompute);
+function getLayout(element, preCompute) {
+  return new Element.Layout(element, preCompute);
+}
+
+function measure(element, property) {
+  return $(element).getLayout().get(property);
+}
+
+function getDimensions(element) {
+  element = $(element);
+  var display = Element.getStyle(element, 'display');
+
+  if (display && display !== 'none') {
+    return { width: element.offsetWidth, height: element.offsetHeight };
   }
 
-  function measure(element, property) {
-    return $(element).getLayout().get(property);
-  }
+  var style = element.style;
+  var originalStyles = {
+    visibility: style.visibility,
+    position:   style.position,
+    display:    style.display
+  };
 
-  function getDimensions(element) {
-    element = $(element);
-    var display = Element.getStyle(element, 'display');
+  var newStyles = {
+    visibility: 'hidden',
+    display:    'block'
+  };
 
-    if (display && display !== 'none') {
-      return { width: element.offsetWidth, height: element.offsetHeight };
-    }
+  if (originalStyles.position !== 'fixed')
+    newStyles.position = 'absolute';
 
-    var style = element.style;
-    var originalStyles = {
-      visibility: style.visibility,
-      position:   style.position,
-      display:    style.display
-    };
+  Element.setStyle(element, newStyles);
 
-    var newStyles = {
-      visibility: 'hidden',
-      display:    'block'
-    };
+  var dimensions = {
+    width:  element.offsetWidth,
+    height: element.offsetHeight
+  };
 
-    if (originalStyles.position !== 'fixed')
-      newStyles.position = 'absolute';
+  Element.setStyle(element, originalStyles);
 
-    Element.setStyle(element, newStyles);
+  return dimensions;
+}
 
-    var dimensions = {
-      width:  element.offsetWidth,
-      height: element.offsetHeight
-    };
+function getOffsetParent(element) {
+  element = $(element);
 
-    Element.setStyle(element, originalStyles);
-
-    return dimensions;
-  }
-
-  function getOffsetParent(element) {
-    element = $(element);
-
-    if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-      return $(document.body);
-
-    var isInline = (Element.getStyle(element, 'display') === 'inline');
-    if (!isInline && element.offsetParent) return $(element.offsetParent);
-
-    while ((element = element.parentNode) && element !== document.body) {
-      if (Element.getStyle(element, 'position') !== 'static') {
-        return isHtml(element) ? $(document.body) : $(element);
-      }
-    }
-
+  if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
     return $(document.body);
-  }
 
+  var isInline = (Element.getStyle(element, 'display') === 'inline');
+  if (!isInline && element.offsetParent) return $(element.offsetParent);
 
-  function cumulativeOffset(element) {
-    element = $(element);
-    var valueT = 0, valueL = 0;
-    if (element.parentNode) {
-      do {
-        valueT += element.offsetTop  || 0;
-        valueL += element.offsetLeft || 0;
-        element = element.offsetParent;
-      } while (element);
+  while ((element = element.parentNode) && element !== document.body) {
+    if (Element.getStyle(element, 'position') !== 'static') {
+      return isHtml(element) ? $(document.body) : $(element);
     }
-    return new Element.Offset(valueL, valueT);
   }
 
-  function positionedOffset(element) {
-    element = $(element);
+  return $(document.body);
+}
 
-    var layout = element.getLayout();
 
-    var valueT = 0, valueL = 0;
+function cumulativeOffset(element) {
+  element = $(element);
+  var valueT = 0, valueL = 0;
+  if (element.parentNode) {
     do {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
       element = element.offsetParent;
-      if (element) {
-        if (isBody(element)) break;
-        var p = Element.getStyle(element, 'position');
-        if (p !== 'static') break;
-      }
     } while (element);
-
-    valueL -= layout.get('margin-top');
-    valueT -= layout.get('margin-left');
-
-    return new Element.Offset(valueL, valueT);
   }
+  return new Element.Offset(valueL, valueT);
+}
 
-  function cumulativeScrollOffset(element) {
-    var valueT = 0, valueL = 0;
-    do {
-      valueT += element.scrollTop  || 0;
-      valueL += element.scrollLeft || 0;
-      element = element.parentNode;
-    } while (element);
-    return new Element.Offset(valueL, valueT);
-  }
+function positionedOffset(element) {
+  element = $(element);
 
-  function viewportOffset(forElement) {
-    element = $(element);
-    var valueT = 0, valueL = 0, docBody = document.body;
+  var layout = element.getLayout();
 
-    var element = forElement;
-    do {
-      valueT += element.offsetTop  || 0;
-      valueL += element.offsetLeft || 0;
-      if (element.offsetParent == docBody &&
-        Element.getStyle(element, 'position') == 'absolute') break;
-    } while (element = element.offsetParent);
-
-    element = forElement;
-    do {
-      if (element != docBody) {
-        valueT -= element.scrollTop  || 0;
-        valueL -= element.scrollLeft || 0;
-      }
-    } while (element = element.parentNode);
-    return new Element.Offset(valueL, valueT);
-  }
-
-  function absolutize(element) {
-    element = $(element);
-
-    if (Element.getStyle(element, 'position') === 'absolute') {
-      return element;
+  var valueT = 0, valueL = 0;
+  do {
+    valueT += element.offsetTop  || 0;
+    valueL += element.offsetLeft || 0;
+    element = element.offsetParent;
+    if (element) {
+      if (isBody(element)) break;
+      var p = Element.getStyle(element, 'position');
+      if (p !== 'static') break;
     }
+  } while (element);
 
-    var offsetParent = getOffsetParent(element);
-    var eOffset = element.viewportOffset(),
-     pOffset = offsetParent.viewportOffset();
+  valueL -= layout.get('margin-top');
+  valueT -= layout.get('margin-left');
 
-    var offset = eOffset.relativeTo(pOffset);
-    var layout = element.getLayout();
+  return new Element.Offset(valueL, valueT);
+}
 
-    element.store('prototype_absolutize_original_styles', {
-      left:   element.getStyle('left'),
-      top:    element.getStyle('top'),
-      width:  element.getStyle('width'),
-      height: element.getStyle('height')
-    });
+function cumulativeScrollOffset(element) {
+  var valueT = 0, valueL = 0;
+  do {
+    valueT += element.scrollTop  || 0;
+    valueL += element.scrollLeft || 0;
+    element = element.parentNode;
+  } while (element);
+  return new Element.Offset(valueL, valueT);
+}
 
-    element.setStyle({
-      position: 'absolute',
-      top:    offset.top + 'px',
-      left:   offset.left + 'px',
-      width:  layout.get('width') + 'px',
-      height: layout.get('height') + 'px'
-    });
+function viewportOffset(forElement) {
+  element = $(element);
+  var valueT = 0, valueL = 0, docBody = document.body;
 
+  var element = forElement;
+  do {
+    valueT += element.offsetTop  || 0;
+    valueL += element.offsetLeft || 0;
+    if (element.offsetParent == docBody &&
+      Element.getStyle(element, 'position') == 'absolute') break;
+  } while (element = element.offsetParent);
+
+element = forElement;
+do {
+  if (element != docBody) {
+    valueT -= element.scrollTop  || 0;
+    valueL -= element.scrollLeft || 0;
+  }
+} while (element = element.parentNode);
+return new Element.Offset(valueL, valueT);
+}
+
+function absolutize(element) {
+  element = $(element);
+
+  if (Element.getStyle(element, 'position') === 'absolute') {
     return element;
   }
 
-  function relativize(element) {
-    element = $(element);
-    if (Element.getStyle(element, 'position') === 'relative') {
-      return element;
-    }
+  var offsetParent = getOffsetParent(element);
+  var eOffset = element.viewportOffset(),
+  pOffset = offsetParent.viewportOffset();
 
-    var originalStyles =
-     element.retrieve('prototype_absolutize_original_styles');
+  var offset = eOffset.relativeTo(pOffset);
+  var layout = element.getLayout();
 
-    if (originalStyles) element.setStyle(originalStyles);
+  element.store('prototype_absolutize_original_styles', {
+    left:   element.getStyle('left'),
+    top:    element.getStyle('top'),
+    width:  element.getStyle('width'),
+    height: element.getStyle('height')
+  });
+
+  element.setStyle({
+    position: 'absolute',
+    top:    offset.top + 'px',
+    left:   offset.left + 'px',
+    width:  layout.get('width') + 'px',
+    height: layout.get('height') + 'px'
+  });
+
+  return element;
+}
+
+function relativize(element) {
+  element = $(element);
+  if (Element.getStyle(element, 'position') === 'relative') {
     return element;
   }
 
-  if (Prototype.Browser.IE) {
-    getOffsetParent = getOffsetParent.wrap(
-      function(proceed, element) {
-        element = $(element);
+  var originalStyles =
+  element.retrieve('prototype_absolutize_original_styles');
 
-        if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-          return $(document.body);
+  if (originalStyles) element.setStyle(originalStyles);
+  return element;
+}
 
-        var position = element.getStyle('position');
-        if (position !== 'static') return proceed(element);
-
-        element.setStyle({ position: 'relative' });
-        var value = proceed(element);
-        element.setStyle({ position: position });
-        return value;
-      }
-    );
-
-    positionedOffset = positionedOffset.wrap(function(proceed, element) {
+if (Prototype.Browser.IE) {
+  getOffsetParent = getOffsetParent.wrap(
+    function(proceed, element) {
       element = $(element);
-      if (!element.parentNode) return new Element.Offset(0, 0);
+
+      if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
+        return $(document.body);
+
       var position = element.getStyle('position');
       if (position !== 'static') return proceed(element);
-
-      var offsetParent = element.getOffsetParent();
-      if (offsetParent && offsetParent.getStyle('position') === 'fixed')
-        hasLayout(offsetParent);
 
       element.setStyle({ position: 'relative' });
       var value = proceed(element);
       element.setStyle({ position: position });
       return value;
-    });
-  } else if (Prototype.Browser.Webkit) {
-    cumulativeOffset = function(element) {
-      element = $(element);
-      var valueT = 0, valueL = 0;
-      do {
-        valueT += element.offsetTop  || 0;
-        valueL += element.offsetLeft || 0;
-        if (element.offsetParent == document.body)
-          if (Element.getStyle(element, 'position') == 'absolute') break;
+    }
+    );
 
-        element = element.offsetParent;
-      } while (element);
+  positionedOffset = positionedOffset.wrap(function(proceed, element) {
+    element = $(element);
+    if (!element.parentNode) return new Element.Offset(0, 0);
+    var position = element.getStyle('position');
+    if (position !== 'static') return proceed(element);
 
-      return new Element.Offset(valueL, valueT);
-    };
-  }
+    var offsetParent = element.getOffsetParent();
+    if (offsetParent && offsetParent.getStyle('position') === 'fixed')
+      hasLayout(offsetParent);
 
-
-  Element.addMethods({
-    getLayout:              getLayout,
-    measure:                measure,
-    getDimensions:          getDimensions,
-    getOffsetParent:        getOffsetParent,
-    cumulativeOffset:       cumulativeOffset,
-    positionedOffset:       positionedOffset,
-    cumulativeScrollOffset: cumulativeScrollOffset,
-    viewportOffset:         viewportOffset,
-    absolutize:             absolutize,
-    relativize:             relativize
+    element.setStyle({ position: 'relative' });
+    var value = proceed(element);
+    element.setStyle({ position: position });
+    return value;
   });
+} else if (Prototype.Browser.Webkit) {
+  cumulativeOffset = function(element) {
+    element = $(element);
+    var valueT = 0, valueL = 0;
+    do {
+      valueT += element.offsetTop  || 0;
+      valueL += element.offsetLeft || 0;
+      if (element.offsetParent == document.body)
+        if (Element.getStyle(element, 'position') == 'absolute') break;
 
-  function isBody(element) {
-    return element.nodeName.toUpperCase() === 'BODY';
-  }
+      element = element.offsetParent;
+    } while (element);
 
-  function isHtml(element) {
-    return element.nodeName.toUpperCase() === 'HTML';
-  }
+    return new Element.Offset(valueL, valueT);
+  };
+}
 
-  function isDocument(element) {
-    return element.nodeType === Node.DOCUMENT_NODE;
-  }
 
-  function isDetached(element) {
-    return element !== document.body &&
-     !Element.descendantOf(element, document.body);
-  }
+Element.addMethods({
+  getLayout:              getLayout,
+  measure:                measure,
+  getDimensions:          getDimensions,
+  getOffsetParent:        getOffsetParent,
+  cumulativeOffset:       cumulativeOffset,
+  positionedOffset:       positionedOffset,
+  cumulativeScrollOffset: cumulativeScrollOffset,
+  viewportOffset:         viewportOffset,
+  absolutize:             absolutize,
+  relativize:             relativize
+});
 
-  if ('getBoundingClientRect' in document.documentElement) {
-    Element.addMethods({
-      viewportOffset: function(element) {
-        element = $(element);
-        if (isDetached(element)) return new Element.Offset(0, 0);
+function isBody(element) {
+  return element.nodeName.toUpperCase() === 'BODY';
+}
 
-        var rect = element.getBoundingClientRect(),
-         docEl = document.documentElement;
-        return new Element.Offset(rect.left - docEl.clientLeft,
-         rect.top - docEl.clientTop);
-      }
-    });
-  }
+function isHtml(element) {
+  return element.nodeName.toUpperCase() === 'HTML';
+}
+
+function isDocument(element) {
+  return element.nodeType === Node.DOCUMENT_NODE;
+}
+
+function isDetached(element) {
+  return element !== document.body &&
+  !Element.descendantOf(element, document.body);
+}
+
+if ('getBoundingClientRect' in document.documentElement) {
+  Element.addMethods({
+    viewportOffset: function(element) {
+      element = $(element);
+      if (isDetached(element)) return new Element.Offset(0, 0);
+
+      var rect = element.getBoundingClientRect(),
+      docEl = document.documentElement;
+      return new Element.Offset(rect.left - docEl.clientLeft,
+       rect.top - docEl.clientTop);
+    }
+  });
+}
 })();
 window.$$ = function() {
   var expression = $A(arguments).join(', ');
@@ -3934,136 +3934,136 @@ Prototype.Selector = (function() {
   };
 })();
 Prototype._original_property = window.Sizzle;
-  
-  (function(){
 
-var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
-	done = 0,
-	toString = Object.prototype.toString,
-	hasDuplicate = false,
-	baseHasDuplicate = true;
+(function(){
 
-[0, 0].sort(function(){
-	baseHasDuplicate = false;
-	return 0;
-});
+  var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
+  done = 0,
+  toString = Object.prototype.toString,
+  hasDuplicate = false,
+  baseHasDuplicate = true;
 
-var Sizzle = function(selector, context, results, seed) {
-	results = results || [];
-	var origContext = context = context || document;
+  [0, 0].sort(function(){
+   baseHasDuplicate = false;
+   return 0;
+ });
 
-	if ( context.nodeType !== 1 && context.nodeType !== 9 ) {
-		return [];
-	}
+  var Sizzle = function(selector, context, results, seed) {
+   results = results || [];
+   var origContext = context = context || document;
 
-	if ( !selector || typeof selector !== "string" ) {
-		return results;
-	}
+   if ( context.nodeType !== 1 && context.nodeType !== 9 ) {
+    return [];
+  }
 
-	var parts = [], m, set, checkSet, check, mode, extra, prune = true, contextXML = isXML(context),
-		soFar = selector;
+  if ( !selector || typeof selector !== "string" ) {
+    return results;
+  }
 
-	while ( (chunker.exec(""), m = chunker.exec(soFar)) !== null ) {
-		soFar = m[3];
+  var parts = [], m, set, checkSet, check, mode, extra, prune = true, contextXML = isXML(context),
+  soFar = selector;
 
-		parts.push( m[1] );
+  while ( (chunker.exec(""), m = chunker.exec(soFar)) !== null ) {
+    soFar = m[3];
 
-		if ( m[2] ) {
-			extra = m[3];
-			break;
-		}
-	}
+    parts.push( m[1] );
 
-	if ( parts.length > 1 && origPOS.exec( selector ) ) {
-		if ( parts.length === 2 && Expr.relative[ parts[0] ] ) {
-			set = posProcess( parts[0] + parts[1], context );
-		} else {
-			set = Expr.relative[ parts[0] ] ?
-				[ context ] :
-				Sizzle( parts.shift(), context );
+    if ( m[2] ) {
+     extra = m[3];
+     break;
+   }
+ }
 
-			while ( parts.length ) {
-				selector = parts.shift();
+ if ( parts.length > 1 && origPOS.exec( selector ) ) {
+  if ( parts.length === 2 && Expr.relative[ parts[0] ] ) {
+   set = posProcess( parts[0] + parts[1], context );
+ } else {
+   set = Expr.relative[ parts[0] ] ?
+   [ context ] :
+   Sizzle( parts.shift(), context );
 
-				if ( Expr.relative[ selector ] )
-					selector += parts.shift();
+   while ( parts.length ) {
+    selector = parts.shift();
 
-				set = posProcess( selector, set );
-			}
-		}
-	} else {
-		if ( !seed && parts.length > 1 && context.nodeType === 9 && !contextXML &&
-				Expr.match.ID.test(parts[0]) && !Expr.match.ID.test(parts[parts.length - 1]) ) {
-			var ret = Sizzle.find( parts.shift(), context, contextXML );
-			context = ret.expr ? Sizzle.filter( ret.expr, ret.set )[0] : ret.set[0];
-		}
+    if ( Expr.relative[ selector ] )
+     selector += parts.shift();
 
-		if ( context ) {
-			var ret = seed ?
-				{ expr: parts.pop(), set: makeArray(seed) } :
-				Sizzle.find( parts.pop(), parts.length === 1 && (parts[0] === "~" || parts[0] === "+") && context.parentNode ? context.parentNode : context, contextXML );
-			set = ret.expr ? Sizzle.filter( ret.expr, ret.set ) : ret.set;
+   set = posProcess( selector, set );
+ }
+}
+} else {
+  if ( !seed && parts.length > 1 && context.nodeType === 9 && !contextXML &&
+    Expr.match.ID.test(parts[0]) && !Expr.match.ID.test(parts[parts.length - 1]) ) {
+   var ret = Sizzle.find( parts.shift(), context, contextXML );
+ context = ret.expr ? Sizzle.filter( ret.expr, ret.set )[0] : ret.set[0];
+}
 
-			if ( parts.length > 0 ) {
-				checkSet = makeArray(set);
-			} else {
-				prune = false;
-			}
+if ( context ) {
+ var ret = seed ?
+ { expr: parts.pop(), set: makeArray(seed) } :
+ Sizzle.find( parts.pop(), parts.length === 1 && (parts[0] === "~" || parts[0] === "+") && context.parentNode ? context.parentNode : context, contextXML );
+ set = ret.expr ? Sizzle.filter( ret.expr, ret.set ) : ret.set;
 
-			while ( parts.length ) {
-				var cur = parts.pop(), pop = cur;
+ if ( parts.length > 0 ) {
+  checkSet = makeArray(set);
+} else {
+  prune = false;
+}
 
-				if ( !Expr.relative[ cur ] ) {
-					cur = "";
-				} else {
-					pop = parts.pop();
-				}
+while ( parts.length ) {
+  var cur = parts.pop(), pop = cur;
 
-				if ( pop == null ) {
-					pop = context;
-				}
+  if ( !Expr.relative[ cur ] ) {
+   cur = "";
+ } else {
+   pop = parts.pop();
+ }
 
-				Expr.relative[ cur ]( checkSet, pop, contextXML );
-			}
-		} else {
-			checkSet = parts = [];
-		}
-	}
+ if ( pop == null ) {
+   pop = context;
+ }
 
-	if ( !checkSet ) {
-		checkSet = set;
-	}
+ Expr.relative[ cur ]( checkSet, pop, contextXML );
+}
+} else {
+ checkSet = parts = [];
+}
+}
 
-	if ( !checkSet ) {
-		throw "Syntax error, unrecognized expression: " + (cur || selector);
-	}
+if ( !checkSet ) {
+  checkSet = set;
+}
 
-	if ( toString.call(checkSet) === "[object Array]" ) {
-		if ( !prune ) {
-			results.push.apply( results, checkSet );
-		} else if ( context && context.nodeType === 1 ) {
-			for ( var i = 0; checkSet[i] != null; i++ ) {
-				if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && contains(context, checkSet[i])) ) {
-					results.push( set[i] );
-				}
-			}
-		} else {
-			for ( var i = 0; checkSet[i] != null; i++ ) {
-				if ( checkSet[i] && checkSet[i].nodeType === 1 ) {
-					results.push( set[i] );
-				}
-			}
-		}
-	} else {
-		makeArray( checkSet, results );
-	}
+if ( !checkSet ) {
+  throw "Syntax error, unrecognized expression: " + (cur || selector);
+}
 
-	if ( extra ) {
-		Sizzle( extra, origContext, results, seed );
-		Sizzle.uniqueSort( results );
-	}
+if ( toString.call(checkSet) === "[object Array]" ) {
+  if ( !prune ) {
+   results.push.apply( results, checkSet );
+ } else if ( context && context.nodeType === 1 ) {
+   for ( var i = 0; checkSet[i] != null; i++ ) {
+    if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && contains(context, checkSet[i])) ) {
+     results.push( set[i] );
+   }
+ }
+} else {
+ for ( var i = 0; checkSet[i] != null; i++ ) {
+  if ( checkSet[i] && checkSet[i].nodeType === 1 ) {
+   results.push( set[i] );
+ }
+}
+}
+} else {
+  makeArray( checkSet, results );
+}
 
-	return results;
+if ( extra ) {
+  Sizzle( extra, origContext, results, seed );
+  Sizzle.uniqueSort( results );
+}
+
+return results;
 };
 
 Sizzle.uniqueSort = function(results){
@@ -4121,76 +4121,76 @@ Sizzle.find = function(expr, context, isXML){
 
 Sizzle.filter = function(expr, set, inplace, not){
 	var old = expr, result = [], curLoop = set, match, anyFound,
-		isXMLFilter = set && set[0] && isXML(set[0]);
+  isXMLFilter = set && set[0] && isXML(set[0]);
 
-	while ( expr && set.length ) {
-		for ( var type in Expr.filter ) {
-			if ( (match = Expr.match[ type ].exec( expr )) != null ) {
-				var filter = Expr.filter[ type ], found, item;
-				anyFound = false;
+  while ( expr && set.length ) {
+    for ( var type in Expr.filter ) {
+     if ( (match = Expr.match[ type ].exec( expr )) != null ) {
+      var filter = Expr.filter[ type ], found, item;
+      anyFound = false;
 
-				if ( curLoop == result ) {
-					result = [];
-				}
+      if ( curLoop == result ) {
+       result = [];
+     }
 
-				if ( Expr.preFilter[ type ] ) {
-					match = Expr.preFilter[ type ]( match, curLoop, inplace, result, not, isXMLFilter );
+     if ( Expr.preFilter[ type ] ) {
+       match = Expr.preFilter[ type ]( match, curLoop, inplace, result, not, isXMLFilter );
 
-					if ( !match ) {
-						anyFound = found = true;
-					} else if ( match === true ) {
-						continue;
-					}
-				}
+       if ( !match ) {
+        anyFound = found = true;
+      } else if ( match === true ) {
+        continue;
+      }
+    }
 
-				if ( match ) {
-					for ( var i = 0; (item = curLoop[i]) != null; i++ ) {
-						if ( item ) {
-							found = filter( item, match, i, curLoop );
-							var pass = not ^ !!found;
+    if ( match ) {
+     for ( var i = 0; (item = curLoop[i]) != null; i++ ) {
+      if ( item ) {
+       found = filter( item, match, i, curLoop );
+       var pass = not ^ !!found;
 
-							if ( inplace && found != null ) {
-								if ( pass ) {
-									anyFound = true;
-								} else {
-									curLoop[i] = false;
-								}
-							} else if ( pass ) {
-								result.push( item );
-								anyFound = true;
-							}
-						}
-					}
-				}
+       if ( inplace && found != null ) {
+        if ( pass ) {
+         anyFound = true;
+       } else {
+         curLoop[i] = false;
+       }
+     } else if ( pass ) {
+      result.push( item );
+      anyFound = true;
+    }
+  }
+}
+}
 
-				if ( found !== undefined ) {
-					if ( !inplace ) {
-						curLoop = result;
-					}
+if ( found !== undefined ) {
+ if ( !inplace ) {
+  curLoop = result;
+}
 
-					expr = expr.replace( Expr.match[ type ], "" );
+expr = expr.replace( Expr.match[ type ], "" );
 
-					if ( !anyFound ) {
-						return [];
-					}
+if ( !anyFound ) {
+  return [];
+}
 
-					break;
-				}
-			}
-		}
+break;
+}
+}
+}
 
-		if ( expr == old ) {
-			if ( anyFound == null ) {
-				throw "Syntax error, unrecognized expression: " + expr;
-			} else {
-				break;
-			}
-		}
+if ( expr == old ) {
+ if ( anyFound == null ) {
+  throw "Syntax error, unrecognized expression: " + expr;
+} else {
+  break;
+}
+}
 
-		old = expr;
-	}
+old = expr;
+}
 
-	return curLoop;
+return curLoop;
 };
 
 var Expr = Sizzle.selectors = {
@@ -4218,372 +4218,372 @@ var Expr = Sizzle.selectors = {
 	relative: {
 		"+": function(checkSet, part, isXML){
 			var isPartStr = typeof part === "string",
-				isTag = isPartStr && !/\W/.test(part),
-				isPartStrNotTag = isPartStr && !isTag;
+      isTag = isPartStr && !/\W/.test(part),
+      isPartStrNotTag = isPartStr && !isTag;
 
-			if ( isTag && !isXML ) {
-				part = part.toUpperCase();
-			}
+      if ( isTag && !isXML ) {
+        part = part.toUpperCase();
+      }
 
-			for ( var i = 0, l = checkSet.length, elem; i < l; i++ ) {
-				if ( (elem = checkSet[i]) ) {
-					while ( (elem = elem.previousSibling) && elem.nodeType !== 1 ) {}
+      for ( var i = 0, l = checkSet.length, elem; i < l; i++ ) {
+        if ( (elem = checkSet[i]) ) {
+         while ( (elem = elem.previousSibling) && elem.nodeType !== 1 ) {}
 
-					checkSet[i] = isPartStrNotTag || elem && elem.nodeName === part ?
-						elem || false :
-						elem === part;
-				}
-			}
+           checkSet[i] = isPartStrNotTag || elem && elem.nodeName === part ?
+         elem || false :
+         elem === part;
+       }
+     }
 
-			if ( isPartStrNotTag ) {
-				Sizzle.filter( part, checkSet, true );
-			}
-		},
-		">": function(checkSet, part, isXML){
-			var isPartStr = typeof part === "string";
+     if ( isPartStrNotTag ) {
+      Sizzle.filter( part, checkSet, true );
+    }
+  },
+  ">": function(checkSet, part, isXML){
+   var isPartStr = typeof part === "string";
 
-			if ( isPartStr && !/\W/.test(part) ) {
-				part = isXML ? part : part.toUpperCase();
+   if ( isPartStr && !/\W/.test(part) ) {
+    part = isXML ? part : part.toUpperCase();
 
-				for ( var i = 0, l = checkSet.length; i < l; i++ ) {
-					var elem = checkSet[i];
-					if ( elem ) {
-						var parent = elem.parentNode;
-						checkSet[i] = parent.nodeName === part ? parent : false;
-					}
-				}
-			} else {
-				for ( var i = 0, l = checkSet.length; i < l; i++ ) {
-					var elem = checkSet[i];
-					if ( elem ) {
-						checkSet[i] = isPartStr ?
-							elem.parentNode :
-							elem.parentNode === part;
-					}
-				}
+    for ( var i = 0, l = checkSet.length; i < l; i++ ) {
+     var elem = checkSet[i];
+     if ( elem ) {
+      var parent = elem.parentNode;
+      checkSet[i] = parent.nodeName === part ? parent : false;
+    }
+  }
+} else {
+  for ( var i = 0, l = checkSet.length; i < l; i++ ) {
+   var elem = checkSet[i];
+   if ( elem ) {
+    checkSet[i] = isPartStr ?
+    elem.parentNode :
+    elem.parentNode === part;
+  }
+}
 
-				if ( isPartStr ) {
-					Sizzle.filter( part, checkSet, true );
-				}
-			}
-		},
-		"": function(checkSet, part, isXML){
-			var doneName = done++, checkFn = dirCheck;
+if ( isPartStr ) {
+ Sizzle.filter( part, checkSet, true );
+}
+}
+},
+"": function(checkSet, part, isXML){
+ var doneName = done++, checkFn = dirCheck;
 
-			if ( !/\W/.test(part) ) {
-				var nodeCheck = part = isXML ? part : part.toUpperCase();
-				checkFn = dirNodeCheck;
-			}
+ if ( !/\W/.test(part) ) {
+  var nodeCheck = part = isXML ? part : part.toUpperCase();
+  checkFn = dirNodeCheck;
+}
 
-			checkFn("parentNode", part, doneName, checkSet, nodeCheck, isXML);
-		},
-		"~": function(checkSet, part, isXML){
-			var doneName = done++, checkFn = dirCheck;
+checkFn("parentNode", part, doneName, checkSet, nodeCheck, isXML);
+},
+"~": function(checkSet, part, isXML){
+ var doneName = done++, checkFn = dirCheck;
 
-			if ( typeof part === "string" && !/\W/.test(part) ) {
-				var nodeCheck = part = isXML ? part : part.toUpperCase();
-				checkFn = dirNodeCheck;
-			}
+ if ( typeof part === "string" && !/\W/.test(part) ) {
+  var nodeCheck = part = isXML ? part : part.toUpperCase();
+  checkFn = dirNodeCheck;
+}
 
-			checkFn("previousSibling", part, doneName, checkSet, nodeCheck, isXML);
-		}
-	},
-	find: {
-		ID: function(match, context, isXML){
-			if ( typeof context.getElementById !== "undefined" && !isXML ) {
-				var m = context.getElementById(match[1]);
-				return m ? [m] : [];
-			}
-		},
-		NAME: function(match, context, isXML){
-			if ( typeof context.getElementsByName !== "undefined" ) {
-				var ret = [], results = context.getElementsByName(match[1]);
+checkFn("previousSibling", part, doneName, checkSet, nodeCheck, isXML);
+}
+},
+find: {
+  ID: function(match, context, isXML){
+   if ( typeof context.getElementById !== "undefined" && !isXML ) {
+    var m = context.getElementById(match[1]);
+    return m ? [m] : [];
+  }
+},
+NAME: function(match, context, isXML){
+ if ( typeof context.getElementsByName !== "undefined" ) {
+  var ret = [], results = context.getElementsByName(match[1]);
 
-				for ( var i = 0, l = results.length; i < l; i++ ) {
-					if ( results[i].getAttribute("name") === match[1] ) {
-						ret.push( results[i] );
-					}
-				}
+  for ( var i = 0, l = results.length; i < l; i++ ) {
+   if ( results[i].getAttribute("name") === match[1] ) {
+    ret.push( results[i] );
+  }
+}
 
-				return ret.length === 0 ? null : ret;
-			}
-		},
-		TAG: function(match, context){
-			return context.getElementsByTagName(match[1]);
-		}
-	},
-	preFilter: {
-		CLASS: function(match, curLoop, inplace, result, not, isXML){
-			match = " " + match[1].replace(/\\/g, "") + " ";
+return ret.length === 0 ? null : ret;
+}
+},
+TAG: function(match, context){
+ return context.getElementsByTagName(match[1]);
+}
+},
+preFilter: {
+  CLASS: function(match, curLoop, inplace, result, not, isXML){
+   match = " " + match[1].replace(/\\/g, "") + " ";
 
-			if ( isXML ) {
-				return match;
-			}
+   if ( isXML ) {
+    return match;
+  }
 
-			for ( var i = 0, elem; (elem = curLoop[i]) != null; i++ ) {
-				if ( elem ) {
-					if ( not ^ (elem.className && (" " + elem.className + " ").indexOf(match) >= 0) ) {
-						if ( !inplace )
-							result.push( elem );
-					} else if ( inplace ) {
-						curLoop[i] = false;
-					}
-				}
-			}
+  for ( var i = 0, elem; (elem = curLoop[i]) != null; i++ ) {
+    if ( elem ) {
+     if ( not ^ (elem.className && (" " + elem.className + " ").indexOf(match) >= 0) ) {
+      if ( !inplace )
+       result.push( elem );
+   } else if ( inplace ) {
+    curLoop[i] = false;
+  }
+}
+}
 
-			return false;
-		},
-		ID: function(match){
-			return match[1].replace(/\\/g, "");
-		},
-		TAG: function(match, curLoop){
-			for ( var i = 0; curLoop[i] === false; i++ ){}
-			return curLoop[i] && isXML(curLoop[i]) ? match[1] : match[1].toUpperCase();
-		},
-		CHILD: function(match){
-			if ( match[1] == "nth" ) {
-				var test = /(-?)(\d*)n((?:\+|-)?\d*)/.exec(
-					match[2] == "even" && "2n" || match[2] == "odd" && "2n+1" ||
-					!/\D/.test( match[2] ) && "0n+" + match[2] || match[2]);
+return false;
+},
+ID: function(match){
+ return match[1].replace(/\\/g, "");
+},
+TAG: function(match, curLoop){
+ for ( var i = 0; curLoop[i] === false; i++ ){}
+   return curLoop[i] && isXML(curLoop[i]) ? match[1] : match[1].toUpperCase();
+},
+CHILD: function(match){
+ if ( match[1] == "nth" ) {
+  var test = /(-?)(\d*)n((?:\+|-)?\d*)/.exec(
+   match[2] == "even" && "2n" || match[2] == "odd" && "2n+1" ||
+   !/\D/.test( match[2] ) && "0n+" + match[2] || match[2]);
 
-				match[2] = (test[1] + (test[2] || 1)) - 0;
-				match[3] = test[3] - 0;
-			}
+  match[2] = (test[1] + (test[2] || 1)) - 0;
+  match[3] = test[3] - 0;
+}
 
-			match[0] = done++;
+match[0] = done++;
 
-			return match;
-		},
-		ATTR: function(match, curLoop, inplace, result, not, isXML){
-			var name = match[1].replace(/\\/g, "");
+return match;
+},
+ATTR: function(match, curLoop, inplace, result, not, isXML){
+ var name = match[1].replace(/\\/g, "");
 
-			if ( !isXML && Expr.attrMap[name] ) {
-				match[1] = Expr.attrMap[name];
-			}
+ if ( !isXML && Expr.attrMap[name] ) {
+  match[1] = Expr.attrMap[name];
+}
 
-			if ( match[2] === "~=" ) {
-				match[4] = " " + match[4] + " ";
-			}
+if ( match[2] === "~=" ) {
+  match[4] = " " + match[4] + " ";
+}
 
-			return match;
-		},
-		PSEUDO: function(match, curLoop, inplace, result, not){
-			if ( match[1] === "not" ) {
-				if ( ( chunker.exec(match[3]) || "" ).length > 1 || /^\w/.test(match[3]) ) {
-					match[3] = Sizzle(match[3], null, null, curLoop);
-				} else {
-					var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
-					if ( !inplace ) {
-						result.push.apply( result, ret );
-					}
-					return false;
-				}
-			} else if ( Expr.match.POS.test( match[0] ) || Expr.match.CHILD.test( match[0] ) ) {
-				return true;
-			}
+return match;
+},
+PSEUDO: function(match, curLoop, inplace, result, not){
+ if ( match[1] === "not" ) {
+  if ( ( chunker.exec(match[3]) || "" ).length > 1 || /^\w/.test(match[3]) ) {
+   match[3] = Sizzle(match[3], null, null, curLoop);
+ } else {
+   var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
+   if ( !inplace ) {
+    result.push.apply( result, ret );
+  }
+  return false;
+}
+} else if ( Expr.match.POS.test( match[0] ) || Expr.match.CHILD.test( match[0] ) ) {
+  return true;
+}
 
-			return match;
-		},
-		POS: function(match){
-			match.unshift( true );
-			return match;
-		}
-	},
-	filters: {
-		enabled: function(elem){
-			return elem.disabled === false && elem.type !== "hidden";
-		},
-		disabled: function(elem){
-			return elem.disabled === true;
-		},
-		checked: function(elem){
-			return elem.checked === true;
-		},
-		selected: function(elem){
-			elem.parentNode.selectedIndex;
-			return elem.selected === true;
-		},
-		parent: function(elem){
-			return !!elem.firstChild;
-		},
-		empty: function(elem){
-			return !elem.firstChild;
-		},
-		has: function(elem, i, match){
-			return !!Sizzle( match[3], elem ).length;
-		},
-		header: function(elem){
-			return /h\d/i.test( elem.nodeName );
-		},
-		text: function(elem){
-			return "text" === elem.type;
-		},
-		radio: function(elem){
-			return "radio" === elem.type;
-		},
-		checkbox: function(elem){
-			return "checkbox" === elem.type;
-		},
-		file: function(elem){
-			return "file" === elem.type;
-		},
-		password: function(elem){
-			return "password" === elem.type;
-		},
-		submit: function(elem){
-			return "submit" === elem.type;
-		},
-		image: function(elem){
-			return "image" === elem.type;
-		},
-		reset: function(elem){
-			return "reset" === elem.type;
-		},
-		button: function(elem){
-			return "button" === elem.type || elem.nodeName.toUpperCase() === "BUTTON";
-		},
-		input: function(elem){
-			return /input|select|textarea|button/i.test(elem.nodeName);
-		}
-	},
-	setFilters: {
-		first: function(elem, i){
-			return i === 0;
-		},
-		last: function(elem, i, match, array){
-			return i === array.length - 1;
-		},
-		even: function(elem, i){
-			return i % 2 === 0;
-		},
-		odd: function(elem, i){
-			return i % 2 === 1;
-		},
-		lt: function(elem, i, match){
-			return i < match[3] - 0;
-		},
-		gt: function(elem, i, match){
-			return i > match[3] - 0;
-		},
-		nth: function(elem, i, match){
-			return match[3] - 0 == i;
-		},
-		eq: function(elem, i, match){
-			return match[3] - 0 == i;
-		}
-	},
-	filter: {
-		PSEUDO: function(elem, match, i, array){
-			var name = match[1], filter = Expr.filters[ name ];
+return match;
+},
+POS: function(match){
+ match.unshift( true );
+ return match;
+}
+},
+filters: {
+  enabled: function(elem){
+   return elem.disabled === false && elem.type !== "hidden";
+ },
+ disabled: function(elem){
+   return elem.disabled === true;
+ },
+ checked: function(elem){
+   return elem.checked === true;
+ },
+ selected: function(elem){
+   elem.parentNode.selectedIndex;
+   return elem.selected === true;
+ },
+ parent: function(elem){
+   return !!elem.firstChild;
+ },
+ empty: function(elem){
+   return !elem.firstChild;
+ },
+ has: function(elem, i, match){
+   return !!Sizzle( match[3], elem ).length;
+ },
+ header: function(elem){
+   return /h\d/i.test( elem.nodeName );
+ },
+ text: function(elem){
+   return "text" === elem.type;
+ },
+ radio: function(elem){
+   return "radio" === elem.type;
+ },
+ checkbox: function(elem){
+   return "checkbox" === elem.type;
+ },
+ file: function(elem){
+   return "file" === elem.type;
+ },
+ password: function(elem){
+   return "password" === elem.type;
+ },
+ submit: function(elem){
+   return "submit" === elem.type;
+ },
+ image: function(elem){
+   return "image" === elem.type;
+ },
+ reset: function(elem){
+   return "reset" === elem.type;
+ },
+ button: function(elem){
+   return "button" === elem.type || elem.nodeName.toUpperCase() === "BUTTON";
+ },
+ input: function(elem){
+   return /input|select|textarea|button/i.test(elem.nodeName);
+ }
+},
+setFilters: {
+  first: function(elem, i){
+   return i === 0;
+ },
+ last: function(elem, i, match, array){
+   return i === array.length - 1;
+ },
+ even: function(elem, i){
+   return i % 2 === 0;
+ },
+ odd: function(elem, i){
+   return i % 2 === 1;
+ },
+ lt: function(elem, i, match){
+   return i < match[3] - 0;
+ },
+ gt: function(elem, i, match){
+   return i > match[3] - 0;
+ },
+ nth: function(elem, i, match){
+   return match[3] - 0 == i;
+ },
+ eq: function(elem, i, match){
+   return match[3] - 0 == i;
+ }
+},
+filter: {
+  PSEUDO: function(elem, match, i, array){
+   var name = match[1], filter = Expr.filters[ name ];
 
-			if ( filter ) {
-				return filter( elem, i, match, array );
-			} else if ( name === "contains" ) {
-				return (elem.textContent || elem.innerText || "").indexOf(match[3]) >= 0;
-			} else if ( name === "not" ) {
-				var not = match[3];
+   if ( filter ) {
+    return filter( elem, i, match, array );
+  } else if ( name === "contains" ) {
+    return (elem.textContent || elem.innerText || "").indexOf(match[3]) >= 0;
+  } else if ( name === "not" ) {
+    var not = match[3];
 
-				for ( var i = 0, l = not.length; i < l; i++ ) {
-					if ( not[i] === elem ) {
-						return false;
-					}
-				}
+    for ( var i = 0, l = not.length; i < l; i++ ) {
+     if ( not[i] === elem ) {
+      return false;
+    }
+  }
 
-				return true;
-			}
-		},
-		CHILD: function(elem, match){
-			var type = match[1], node = elem;
-			switch (type) {
-				case 'only':
-				case 'first':
-					while ( (node = node.previousSibling) )  {
-						if ( node.nodeType === 1 ) return false;
-					}
-					if ( type == 'first') return true;
-					node = elem;
-				case 'last':
-					while ( (node = node.nextSibling) )  {
-						if ( node.nodeType === 1 ) return false;
-					}
-					return true;
-				case 'nth':
-					var first = match[2], last = match[3];
+  return true;
+}
+},
+CHILD: function(elem, match){
+ var type = match[1], node = elem;
+ switch (type) {
+  case 'only':
+  case 'first':
+  while ( (node = node.previousSibling) )  {
+    if ( node.nodeType === 1 ) return false;
+  }
+  if ( type == 'first') return true;
+  node = elem;
+  case 'last':
+  while ( (node = node.nextSibling) )  {
+    if ( node.nodeType === 1 ) return false;
+  }
+  return true;
+  case 'nth':
+  var first = match[2], last = match[3];
 
-					if ( first == 1 && last == 0 ) {
-						return true;
-					}
+  if ( first == 1 && last == 0 ) {
+    return true;
+  }
 
-					var doneName = match[0],
-						parent = elem.parentNode;
+  var doneName = match[0],
+  parent = elem.parentNode;
 
-					if ( parent && (parent.sizcache !== doneName || !elem.nodeIndex) ) {
-						var count = 0;
-						for ( node = parent.firstChild; node; node = node.nextSibling ) {
-							if ( node.nodeType === 1 ) {
-								node.nodeIndex = ++count;
-							}
-						}
-						parent.sizcache = doneName;
-					}
+  if ( parent && (parent.sizcache !== doneName || !elem.nodeIndex) ) {
+    var count = 0;
+    for ( node = parent.firstChild; node; node = node.nextSibling ) {
+     if ( node.nodeType === 1 ) {
+      node.nodeIndex = ++count;
+    }
+  }
+  parent.sizcache = doneName;
+}
 
-					var diff = elem.nodeIndex - last;
-					if ( first == 0 ) {
-						return diff == 0;
-					} else {
-						return ( diff % first == 0 && diff / first >= 0 );
-					}
-			}
-		},
-		ID: function(elem, match){
-			return elem.nodeType === 1 && elem.getAttribute("id") === match;
-		},
-		TAG: function(elem, match){
-			return (match === "*" && elem.nodeType === 1) || elem.nodeName === match;
-		},
-		CLASS: function(elem, match){
-			return (" " + (elem.className || elem.getAttribute("class")) + " ")
-				.indexOf( match ) > -1;
-		},
-		ATTR: function(elem, match){
-			var name = match[1],
-				result = Expr.attrHandle[ name ] ?
-					Expr.attrHandle[ name ]( elem ) :
-					elem[ name ] != null ?
-						elem[ name ] :
-						elem.getAttribute( name ),
-				value = result + "",
-				type = match[2],
-				check = match[4];
+var diff = elem.nodeIndex - last;
+if ( first == 0 ) {
+  return diff == 0;
+} else {
+  return ( diff % first == 0 && diff / first >= 0 );
+}
+}
+},
+ID: function(elem, match){
+ return elem.nodeType === 1 && elem.getAttribute("id") === match;
+},
+TAG: function(elem, match){
+ return (match === "*" && elem.nodeType === 1) || elem.nodeName === match;
+},
+CLASS: function(elem, match){
+ return (" " + (elem.className || elem.getAttribute("class")) + " ")
+ .indexOf( match ) > -1;
+},
+ATTR: function(elem, match){
+ var name = match[1],
+ result = Expr.attrHandle[ name ] ?
+ Expr.attrHandle[ name ]( elem ) :
+ elem[ name ] != null ?
+ elem[ name ] :
+ elem.getAttribute( name ),
+ value = result + "",
+ type = match[2],
+ check = match[4];
 
-			return result == null ?
-				type === "!=" :
-				type === "=" ?
-				value === check :
-				type === "*=" ?
-				value.indexOf(check) >= 0 :
-				type === "~=" ?
-				(" " + value + " ").indexOf(check) >= 0 :
-				!check ?
-				value && result !== false :
-				type === "!=" ?
-				value != check :
-				type === "^=" ?
-				value.indexOf(check) === 0 :
-				type === "$=" ?
-				value.substr(value.length - check.length) === check :
-				type === "|=" ?
-				value === check || value.substr(0, check.length + 1) === check + "-" :
-				false;
-		},
-		POS: function(elem, match, i, array){
-			var name = match[2], filter = Expr.setFilters[ name ];
+ return result == null ?
+ type === "!=" :
+ type === "=" ?
+ value === check :
+ type === "*=" ?
+ value.indexOf(check) >= 0 :
+ type === "~=" ?
+ (" " + value + " ").indexOf(check) >= 0 :
+ !check ?
+ value && result !== false :
+ type === "!=" ?
+ value != check :
+ type === "^=" ?
+ value.indexOf(check) === 0 :
+ type === "$=" ?
+ value.substr(value.length - check.length) === check :
+ type === "|=" ?
+ value === check || value.substr(0, check.length + 1) === check + "-" :
+ false;
+},
+POS: function(elem, match, i, array){
+ var name = match[2], filter = Expr.setFilters[ name ];
 
-			if ( filter ) {
-				return filter( elem, i, match, array );
-			}
-		}
-	}
+ if ( filter ) {
+  return filter( elem, i, match, array );
+}
+}
+}
 };
 
 var origPOS = Expr.match.POS;
@@ -4685,27 +4685,27 @@ if ( document.documentElement.compareDocumentPosition ) {
 
 (function(){
 	var form = document.createElement("div"),
-		id = "script" + (new Date).getTime();
-	form.innerHTML = "<a name='" + id + "'/>";
+  id = "script" + (new Date).getTime();
+  form.innerHTML = "<a name='" + id + "'/>";
 
-	var root = document.documentElement;
-	root.insertBefore( form, root.firstChild );
+  var root = document.documentElement;
+  root.insertBefore( form, root.firstChild );
 
-	if ( !!document.getElementById( id ) ) {
-		Expr.find.ID = function(match, context, isXML){
-			if ( typeof context.getElementById !== "undefined" && !isXML ) {
-				var m = context.getElementById(match[1]);
-				return m ? m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ? [m] : undefined : [];
-			}
-		};
+  if ( !!document.getElementById( id ) ) {
+    Expr.find.ID = function(match, context, isXML){
+     if ( typeof context.getElementById !== "undefined" && !isXML ) {
+      var m = context.getElementById(match[1]);
+      return m ? m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ? [m] : undefined : [];
+    }
+  };
 
-		Expr.filter.ID = function(elem, match){
-			var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
-			return elem.nodeType === 1 && node && node.nodeValue === match;
-		};
-	}
+  Expr.filter.ID = function(elem, match){
+   var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
+   return elem.nodeType === 1 && node && node.nodeValue === match;
+ };
+}
 
-	root.removeChild( form );
+root.removeChild( form );
 	root = form = null; // release memory in IE
 })();
 
@@ -4736,7 +4736,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 
 	div.innerHTML = "<a href='#'></a>";
 	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
-			div.firstChild.getAttribute("href") !== "#" ) {
+   div.firstChild.getAttribute("href") !== "#" ) {
 		Expr.attrHandle.href = function(elem){
 			return elem.getAttribute("href", 2);
 		};
@@ -4881,25 +4881,25 @@ var contains = document.compareDocumentPosition ?  function(a, b){
 
 var isXML = function(elem){
 	return elem.nodeType === 9 && elem.documentElement.nodeName !== "HTML" ||
-		!!elem.ownerDocument && elem.ownerDocument.documentElement.nodeName !== "HTML";
+  !!elem.ownerDocument && elem.ownerDocument.documentElement.nodeName !== "HTML";
 };
 
 var posProcess = function(selector, context){
 	var tmpSet = [], later = "", match,
-		root = context.nodeType ? [context] : context;
+  root = context.nodeType ? [context] : context;
 
-	while ( (match = Expr.match.PSEUDO.exec( selector )) ) {
-		later += match[0];
-		selector = selector.replace( Expr.match.PSEUDO, "" );
-	}
+  while ( (match = Expr.match.PSEUDO.exec( selector )) ) {
+    later += match[0];
+    selector = selector.replace( Expr.match.PSEUDO, "" );
+  }
 
-	selector = Expr.relative[selector] ? selector + "*" : selector;
+  selector = Expr.relative[selector] ? selector + "*" : selector;
 
-	for ( var i = 0, l = root.length; i < l; i++ ) {
-		Sizzle( selector, root[i], tmpSet );
-	}
+  for ( var i = 0, l = root.length; i < l; i++ ) {
+    Sizzle( selector, root[i], tmpSet );
+  }
 
-	return Sizzle.filter( later, tmpSet );
+  return Sizzle.filter( later, tmpSet );
 };
 
 
@@ -4958,12 +4958,12 @@ var Form = {
       if (!element.disabled && element.name) {
         key = element.name; value = $(element).getValue();
         if (value != null && element.type != 'file' && (element.type != 'submit' || (!submitted &&
-            submit !== false && (!submit || key == submit) && (submitted = true)))) {
+          submit !== false && (!submit || key == submit) && (submitted = true)))) {
           result = accumulator(result, key, value);
-        }
       }
-      return result;
-    });
+    }
+    return result;
+  });
   }
 };
 
@@ -4974,9 +4974,9 @@ Form.Methods = {
 
   getElements: function(form) {
     var elements = $(form).getElementsByTagName('*'),
-        element,
-        arr = [ ],
-        serializers = Form.Element.Serializers;
+    element,
+    arr = [ ],
+    serializers = Form.Element.Serializers;
     for (var i = 0; element = elements[i]; i++) {
       arr.push(element);
     }
@@ -5108,7 +5108,7 @@ Form.Element.Methods = {
     try {
       element.focus();
       if (element.select && (element.tagName.toLowerCase() != 'input' ||
-          !(/^(?:button|reset|submit)$/i.test(element.type))))
+        !(/^(?:button|reset|submit)$/i.test(element.type))))
         element.select();
     } catch (e) { }
     return element;
@@ -5136,9 +5136,9 @@ Form.Element.Serializers = (function() {
     switch (element.type.toLowerCase()) {
       case 'checkbox':
       case 'radio':
-        return inputSelector(element, value);
+      return inputSelector(element, value);
       default:
-        return valueSelector(element, value);
+      return valueSelector(element, value);
     }
   }
 
@@ -5213,11 +5213,11 @@ Abstract.TimedObserver = Class.create(PeriodicalExecuter, {
   execute: function() {
     var value = this.getValue();
     if (Object.isString(this.lastValue) && Object.isString(value) ?
-        this.lastValue != value : String(this.lastValue) != String(value)) {
+      this.lastValue != value : String(this.lastValue) != String(value)) {
       this.callback(this.element, value);
-      this.lastValue = value;
-    }
+    this.lastValue = value;
   }
+}
 });
 
 Form.Element.Observer = Class.create(Abstract.TimedObserver, {
@@ -5261,11 +5261,11 @@ Abstract.EventObserver = Class.create({
       switch (element.type.toLowerCase()) {
         case 'checkbox':
         case 'radio':
-          Event.observe(element, 'click', this.onElementEvent.bind(this));
-          break;
+        Event.observe(element, 'click', this.onElementEvent.bind(this));
+        break;
         default:
-          Event.observe(element, 'change', this.onElementEvent.bind(this));
-          break;
+        Event.observe(element, 'change', this.onElementEvent.bind(this));
+        break;
       }
     }
   }
@@ -5305,7 +5305,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   var docEl = document.documentElement;
   var MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED = 'onmouseenter' in docEl
-    && 'onmouseleave' in docEl;
+  && 'onmouseleave' in docEl;
 
 
 
@@ -5347,7 +5347,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     } else {
       _isButton = function(event, code) {
         return isIELegacyEvent(event) ? _isButtonForLegacyEvents(event, code) :
-         _isButtonForDOMEvents(event, code);
+        _isButtonForDOMEvents(event, code);
       }
     }
   } else if (Prototype.Browser.WebKit) {
@@ -5366,13 +5366,13 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     event = Event.extend(event);
 
     var node = event.target, type = event.type,
-     currentTarget = event.currentTarget;
+    currentTarget = event.currentTarget;
 
     if (currentTarget && currentTarget.tagName) {
       if (type === 'load' || type === 'error' ||
         (type === 'click' && currentTarget.tagName.toLowerCase() === 'input'
           && currentTarget.type === 'radio'))
-            node = currentTarget;
+        node = currentTarget;
     }
 
     if (node.nodeType == Node.TEXT_NODE)
@@ -5399,7 +5399,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   function pointerX(event) {
     var docElement = document.documentElement,
-     body = document.body || { scrollLeft: 0 };
+    body = document.body || { scrollLeft: 0 };
 
     return event.pageX || (event.clientX +
       (docElement.scrollLeft || body.scrollLeft) -
@@ -5408,11 +5408,11 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   function pointerY(event) {
     var docElement = document.documentElement,
-     body = document.body || { scrollTop: 0 };
+    body = document.body || { scrollTop: 0 };
 
     return  event.pageY || (event.clientY +
-       (docElement.scrollTop || body.scrollTop) -
-       (docElement.clientTop || 0));
+     (docElement.scrollTop || body.scrollTop) -
+     (docElement.clientTop || 0));
   }
 
 
@@ -5451,14 +5451,14 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
       switch (event.type) {
         case 'mouseover':
         case 'mouseenter':
-          element = event.fromElement;
-          break;
+        element = event.fromElement;
+        break;
         case 'mouseout':
         case 'mouseleave':
-          element = event.toElement;
-          break;
+        element = event.toElement;
+        break;
         default:
-          return null;
+        return null;
       }
       return Element.extend(element);
     }
@@ -5576,7 +5576,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
 
   var _getDOMEventName = Prototype.K,
-      translations = { mouseenter: "mouseover", mouseleave: "mouseout" };
+  translations = { mouseenter: "mouseover", mouseleave: "mouseout" };
 
   if (!MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED) {
     _getDOMEventName = function(eventName) {
@@ -5832,13 +5832,13 @@ var Position = {
 
   prepare: function() {
     this.deltaX =  window.pageXOffset
-                || document.documentElement.scrollLeft
-                || document.body.scrollLeft
-                || 0;
+    || document.documentElement.scrollLeft
+    || document.body.scrollLeft
+    || 0;
     this.deltaY =  window.pageYOffset
-                || document.documentElement.scrollTop
-                || document.body.scrollTop
-                || 0;
+    || document.documentElement.scrollTop
+    || document.body.scrollTop
+    || 0;
   },
 
   within: function(element, x, y) {
@@ -5849,9 +5849,9 @@ var Position = {
     this.offset = Element.cumulativeOffset(element);
 
     return (y >= this.offset[1] &&
-            y <  this.offset[1] + element.offsetHeight &&
-            x >= this.offset[0] &&
-            x <  this.offset[0] + element.offsetWidth);
+      y <  this.offset[1] + element.offsetHeight &&
+      x >= this.offset[0] &&
+      x <  this.offset[0] + element.offsetWidth);
   },
 
   withinIncludingScrolloffsets: function(element, x, y) {
@@ -5862,19 +5862,19 @@ var Position = {
     this.offset = Element.cumulativeOffset(element);
 
     return (this.ycomp >= this.offset[1] &&
-            this.ycomp <  this.offset[1] + element.offsetHeight &&
-            this.xcomp >= this.offset[0] &&
-            this.xcomp <  this.offset[0] + element.offsetWidth);
+      this.ycomp <  this.offset[1] + element.offsetHeight &&
+      this.xcomp >= this.offset[0] &&
+      this.xcomp <  this.offset[0] + element.offsetWidth);
   },
 
   overlap: function(mode, element) {
     if (!mode) return 0;
     if (mode == 'vertical')
       return ((this.offset[1] + element.offsetHeight) - this.ycomp) /
-        element.offsetHeight;
+    element.offsetHeight;
     if (mode == 'horizontal')
       return ((this.offset[0] + element.offsetWidth) - this.xcomp) /
-        element.offsetWidth;
+    element.offsetWidth;
   },
 
 
@@ -5924,9 +5924,9 @@ if (!document.getElementsByClassName) document.getElementsByClassName = function
 
     for (var i = 0, child, cn; child = nodes[i]; i++) {
       if (child.className && (cn = ' ' + child.className + ' ') && (cn.include(className) ||
-          (classNames && classNames.all(function(name) {
-            return !name.toString().blank() && cn.include(' ' + name + ' ');
-          }))))
+        (classNames && classNames.all(function(name) {
+          return !name.toString().blank() && cn.include(' ' + name + ' ');
+        }))))
         elements.push(Element.extend(child));
     }
     return elements;
@@ -5996,7 +5996,7 @@ Object.extend(Element.ClassNames.prototype, Enumerable);
   Object.extend(Selector, {
     matchElements: function(elements, expression) {
       var match = Prototype.Selector.match,
-          results = [];
+      results = [];
 
       for (var i = 0, length = elements.length; i < length; i++) {
         var element = elements[i];
