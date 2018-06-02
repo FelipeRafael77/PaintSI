@@ -18,17 +18,21 @@ input[type="button"]{
     color: #424242;
     
 }
+
 #button2 {
     font-family: Comic Sans MS;
     margin-top: 20px;
     width: 110px;
     height: 40px;
 }
+
 #canvas{
  border: solid;
- margin-top: 80px;
- cursor:pointer;
 
+}
+
+#imagem{
+    border: solid;
 }
 
 #escolhas button {
@@ -44,4 +48,9 @@ input[type="button"]{
     color: #330000;
     background-color: #424242;
 
+}
+#visualizar{
+    width: 600px;
+    height: 600px;
+    margin-top: 0px;
 }

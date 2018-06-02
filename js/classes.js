@@ -119,7 +119,7 @@ function palcores(){
 
 	var visualizar = document.getElementById('visualizar');
 	var escolhas = document.getElementById('escolhas');
-	var canvas = document.querySelector("#canvas");
+
 	cores.forEach(function(cor) {
 		var button = document.createElement('button');
 		button.value = cor;
