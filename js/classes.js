@@ -50,13 +50,37 @@ var RetanguloCheio = Class.create(Figura, {
 
 var Circulo = Class.create(Figura, {
 	draw: function(canvas){
-		canvas.beginPath();;
-		canvas.arc(100,75,50,0,2*Math.PI);
+		let radius = Math.sqrt(Math.pow((this.x1-this.x2), 2)+Math.pow((this.y1-this.y2), 2));
+		canvas.beginPath();
+		canvas.arc(this.x1, this.y1, radius, 0, 2 * Math.PI);
+		canvas.stroke();
+	}
+});
+
+
+var CirculoCheio = Class.create(Figura, {
+	draw: function(canvas){
+		let radius = Math.sqrt(Math.pow((this.x1-this.x2), 2)+Math.pow((this.y1-this.y2), 2));
+		canvas.beginPath();
+		canvas.arc(this.x1, this.y1, radius, 0, 2 * Math.PI);
+		canvas.fill();
 		canvas.stroke();
 	}
 });
 
 var Triangulo = Class.create(Figura, {
+	draw: function(canvas){
+		
+    canvas.beginPath();
+    canvas.moveTo(300,150);
+    canvas.lineTo(300,300);
+    canvas.lineTo(150,300);
+    canvas.closePath();
+    canvas.stroke();
+	}
+});
+
+var TrianguloCheio = Class.create(Figura, {
 	draw: function(canvas){
 		
 		canvas.beginPath();
@@ -106,12 +130,20 @@ function drawFillRect() {
 }
 
 function drawCircle(){
-	figura = new Circulo(); 
+	figura = new Circulo();
+}
+
+function drawFillCircle(){
+	figura = new CirculoCheio(); 
 }
 
 function drawTriangle(){
 	figura = new Triangulo();
 
+}
+
+function drawFillTriangle(){
+	figura = new TrianguloCheio();
 }
 
 function palcores(){

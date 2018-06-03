@@ -8,7 +8,8 @@
  </head>
  <body background="quadro.jpg">
    <div>
-    <input type="button" onclick="drawCircle();" value="Circulo"/>
+   	<input type="button" onclick="drawCircle();" value="Circulo">
+    <input type="button" onclick="drawFillCircle();" value="Circulo Cheio"/>
      <input type="button" onclick="drawLine();" value="Linha"/>
      <input type="button" onclick="drawLineWidth();" value="Linha Grossa">
      <input type="button" onclick="drawStrokeRect();" value="Retangulo">
@@ -16,6 +17,7 @@
     <div class= "button2">
      <input type="button" onclick="drawFillRect();" value="Retangulo Cheio"/>
      <input type="button" onclick="drawTriangle();" value="Triangulo"/>
+     <input type="button" onclick="drawFillTriangle();" value="Triangulo Cheio">
      <input type="button" id="toggle" onclick="toggleShadow();" value="Ligar sombra"/>
     <input type="button" onclick="palcores();" value="Paleta de Cores">
     <input type="button" onclick="save();" value="Salvar">
@@ -25,7 +27,7 @@
     <div id="visualizar">
     
    <canvas id="canvas" width="600" height="600" onmousedown="createFigure(event);" onmouseup="closeFigure(event);"></canvas>
-   <img id="imagem"></div>
+   <img id="imagem">
  
  </body>
 </html>
